@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import MockupGenerator from '../components/MockupGenerator.jsx';
 
 const TRUST_BADGES = [
   { icon: '🎓', title: 'IIT Roorkee Certified', desc: 'AI/ML Engineering Standards' },
@@ -40,15 +41,13 @@ const TRANSFORMATION_ITEMS = [
 ];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState(0);
-
   return (
     <div className="home-page">
-      {/* Hero Section */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '4rem', position: 'relative' }}>
+      {/* 1. Hero Section */}
+      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '3.5rem', position: 'relative' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
-            <span>⚡ Tailored For Salons, Clinics, Cafes & Retail</span>
+            <span>⚡ Specialized Web Engineering for Offline Businesses</span>
           </div>
 
           <h1 className="section-title" style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', maxWidth: '950px', margin: '0 auto 1.5rem', lineHeight: '1.15' }}>
@@ -56,7 +55,7 @@ export default function Home() {
           </h1>
 
           <p className="section-subtitle" style={{ maxWidth: '780px', margin: '0 auto 2.5rem', fontSize: '1.2rem' }}>
-            We engineer high-converting websites, WhatsApp automations, and local Google SEO engines for brick-and-mortar business owners ready to dominate their local market.
+            We engineer high-converting websites, WhatsApp automations, 3D interactive experiences, and local Google SEO engines for brick-and-mortar businesses.
           </p>
 
           {/* Action CTAs */}
@@ -99,8 +98,15 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Offline to Online Transformation Engine */}
-      <section className="section-padding" style={{ background: 'rgba(15, 23, 42, 0.4)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
+      {/* 2. Interactive Instant Website Mockup Generator (High-Converting Tool) */}
+      <section className="section-padding" style={{ background: 'rgba(15, 23, 42, 0.5)', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div className="container">
+          <MockupGenerator />
+        </div>
+      </section>
+
+      {/* 3. Offline to Online Transformation Blueprint */}
+      <section className="section-padding">
         <div className="container">
           <div className="section-header">
             <div className="section-tag">Transformation Blueprint</div>
@@ -148,7 +154,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3 Service Tiers Overview */}
+
+      {/* 5. 3 Service Tiers Overview */}
       <section className="section-padding">
         <div className="container">
           <div className="section-header">
@@ -236,7 +243,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Free Digital Readiness Score Banner */}
+      {/* 6. Free Digital Readiness Score Banner */}
       <section className="section-padding" style={{ paddingTop: '2rem', paddingBottom: '5rem' }}>
         <div className="container">
           <div className="glass-card" style={{ 

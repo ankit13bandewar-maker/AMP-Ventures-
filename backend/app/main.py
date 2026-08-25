@@ -7,6 +7,7 @@ from app.routes.contact import router as contact_router
 from app.routes.readiness import router as readiness_router
 from app.routes.chatbot import router as chatbot_router
 from app.routes.portfolio import router as portfolio_router
+from app.routes.mockup import router as mockup_router
 from datetime import datetime, timezone
 
 @asynccontextmanager
@@ -37,6 +38,8 @@ app.include_router(contact_router, prefix=settings.API_PREFIX, tags=["Contact & 
 app.include_router(readiness_router, prefix=settings.API_PREFIX, tags=["Digital Readiness Score"])
 app.include_router(chatbot_router, prefix=settings.API_PREFIX, tags=["AI Chatbot"])
 app.include_router(portfolio_router, prefix=settings.API_PREFIX, tags=["Portfolio"])
+app.include_router(mockup_router, prefix=settings.API_PREFIX, tags=["Mockup Generator"])
+
 
 @app.get(f"{settings.API_PREFIX}/health", tags=["System"])
 async def health_check():
