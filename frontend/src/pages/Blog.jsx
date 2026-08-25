@@ -10,7 +10,7 @@ const BLOG_POSTS = [
     readTime: '4 min read',
     date: 'August 2026',
     author: 'AMP Engineering Team',
-    gradient: 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%)'
+    image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const BLOG_POSTS = [
     readTime: '6 min read',
     date: 'August 2026',
     author: 'Lead Architect',
-    gradient: 'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)'
+    image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const BLOG_POSTS = [
     readTime: '5 min read',
     date: 'August 2026',
     author: 'AMP Engineering Team',
-    gradient: 'linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)'
+    image: 'https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 4,
@@ -40,7 +40,27 @@ const BLOG_POSTS = [
     readTime: '5 min read',
     date: 'August 2026',
     author: 'Lead Architect',
-    gradient: 'linear-gradient(135deg, #10B981 0%, #06B6D4 100%)'
+    image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 5,
+    title: 'WhatsApp Commerce: How Local Boutiques Convert Browsers into Daily Buyers',
+    excerpt: 'How retail boutiques turn Instagram followers and walk-ins into a VIP broadcast channel with instant 1-click cart checkout.',
+    category: 'Retail & Commerce',
+    readTime: '4 min read',
+    date: 'August 2026',
+    author: 'AMP Engineering Team',
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80'
+  },
+  {
+    id: 6,
+    title: 'Speed Equals Revenue: Why Sub-Second Load Times Double In-Store Footfall',
+    excerpt: 'Every 100ms delay in mobile load time reduces conversions by 7%. How headless architecture delivers ultra-fast local experiences.',
+    category: 'Performance',
+    readTime: '5 min read',
+    date: 'August 2026',
+    author: 'Lead Architect',
+    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'
   }
 ];
 
@@ -70,8 +90,17 @@ export default function Blog() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
             {BLOG_POSTS.map((post) => (
               <div key={post.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div style={{ height: '140px', background: post.gradient, display: 'flex', alignItems: 'flex-end', padding: '1.25rem' }}>
-                  <span className="badge" style={{ background: 'rgba(0,0,0,0.5)', color: '#fff' }}>
+                <div style={{ 
+                  height: '160px', 
+                  backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.85) 100%), url(${post.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  display: 'flex', 
+                  alignItems: 'flex-end', 
+                  padding: '1.25rem',
+                  position: 'relative'
+                }}>
+                  <span className="badge" style={{ background: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>
                     {post.category}
                   </span>
                 </div>
@@ -80,8 +109,8 @@ export default function Blog() {
                     <span>{post.date}</span>
                     <span>⏱️ {post.readTime}</span>
                   </div>
-                  <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', lineHeight: '1.35' }}>{post.title}</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.5rem', flexGrow: 1 }}>
+                  <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', lineHeight: '1.35' }}>{post.title}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.5rem', flexGrow: 1 }}>
                     {post.excerpt}
                   </p>
                   <button 

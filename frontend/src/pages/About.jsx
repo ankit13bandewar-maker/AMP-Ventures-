@@ -4,46 +4,78 @@ import { Link } from 'react-router-dom';
 const VALUES = [
   {
     icon: '⚡',
-    title: 'Performance & Speed First',
-    desc: 'Slow websites kill local sales. We code lightweight, bloat-free React and FastAPI applications with sub-second page loads.'
+    title: 'Ultra Fast Speed',
+    points: [
+      'Instant page loading',
+      'Smooth mobile experience',
+      'Zero slow plugins'
+    ]
   },
   {
     icon: '🎯',
-    title: 'Conversion, Not Fluff',
-    desc: 'A pretty site that brings zero calls or walk-ins is useless. Every button, layout, and copy block is engineered to turn visitors into paying customers.'
+    title: 'Built for Sales',
+    points: [
+      'Easy WhatsApp booking',
+      'Clear call-to-action buttons',
+      'Turns visitors into buyers'
+    ]
   },
   {
     icon: '🔒',
-    title: 'Zero Vendor Lock-in',
-    desc: 'You own your codebase, database, domain, and assets 100%. We provide transparent documentation and clean code handover.'
+    title: '100% Ownership',
+    points: [
+      'You own your website code',
+      'Full control of your data',
+      'No lock-in or hidden fees'
+    ]
   },
   {
     icon: '🤖',
-    title: 'Future-Proof Tech',
-    desc: 'From custom CMS to 3D WebGL visuals and AI conversational assistants, we prepare your offline business for the next decade of web standards.'
+    title: 'Modern Technology',
+    points: [
+      'Easy photo & menu updates',
+      'Smart AI chatbot assistant',
+      'Future-proof clean build'
+    ]
   }
 ];
 
 const PROCESS_STEPS = [
   {
     step: '01',
-    title: 'Discovery & Local Audit',
-    desc: 'We analyze your current foot-traffic bottlenecks, audit local Google Maps competitors in your city, and define your core conversion goals.'
+    title: 'Business Review',
+    points: [
+      'Understand your goals',
+      'Check local competition',
+      'Plan website structure'
+    ]
   },
   {
     step: '02',
-    title: 'Bespoke UI/UX Architecture',
-    desc: 'We design a high-contrast, modern interface tailored specifically to your offline industry (salon, clinic, restaurant, or retail store).'
+    title: 'Design & Layout',
+    points: [
+      'Clean modern design',
+      'Mobile-friendly layout',
+      'Match your brand style'
+    ]
   },
   {
     step: '03',
-    title: 'Fullstack Engineering & Integrations',
-    desc: 'We build your decoupled frontend and backend, wiring WhatsApp click-to-chat, contact forms, CMS editors, and automated notifications.'
+    title: 'Build & Features',
+    points: [
+      'Fast website coding',
+      'WhatsApp direct booking',
+      'Instant lead forms'
+    ]
   },
   {
     step: '04',
-    title: 'Launch, Map Sync & Growth Handover',
-    desc: 'We deploy to high-speed CDN servers, link your Google Business Profile for local SEO ranking, and provide video training for your team.'
+    title: 'Launch & Handover',
+    points: [
+      'Go live on fast server',
+      'Connect Google Maps ranking',
+      'Full training & ownership'
+    ]
   }
 ];
 
@@ -151,12 +183,19 @@ export default function About() {
             <p className="section-subtitle">The four pillars underlying every project delivered by AMP Ventures.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
             {VALUES.map((val, idx) => (
-              <div key={idx} className="glass-card" style={{ padding: '2rem' }}>
-                <div style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>{val.icon}</div>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.65rem' }}>{val.title}</h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{val.desc}</p>
+              <div key={idx} className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{val.icon}</div>
+                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.75rem', color: '#fff' }}>{val.title}</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                  {val.points.map((pt, pIdx) => (
+                    <li key={pIdx} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
+                      <span style={{ color: 'var(--primary-light)', fontSize: '0.75rem', marginTop: '0.15rem' }}>•</span>
+                      <span>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -172,14 +211,21 @@ export default function About() {
             <p className="section-subtitle">From initial brief to live Google ranking in under 14 days.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
             {PROCESS_STEPS.map((step, idx) => (
-              <div key={idx} className="glass-card" style={{ padding: '2rem', position: 'relative' }}>
-                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'rgba(99, 102, 241, 0.3)', fontFamily: 'var(--font-mono)', lineHeight: 1, marginBottom: '1rem' }}>
+              <div key={idx} className="glass-card" style={{ padding: '1.75rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'rgba(99, 102, 241, 0.4)', fontFamily: 'var(--font-mono)', lineHeight: 1, marginBottom: '0.75rem' }}>
                   {step.step}
                 </div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.5rem', color: '#fff' }}>{step.title}</h3>
-                <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>{step.desc}</p>
+                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.85rem', color: '#fff' }}>{step.title}</h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                  {step.points.map((pt, pIdx) => (
+                    <li key={pIdx} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
+                      <span style={{ color: 'var(--primary-light)', fontSize: '0.75rem', marginTop: '0.15rem' }}>•</span>
+                      <span>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>

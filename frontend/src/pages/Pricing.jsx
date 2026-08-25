@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import FaqSection from '../components/FaqSection.jsx';
 
 const PRICING_TIERS = [
   {
@@ -70,32 +71,7 @@ const PRICING_TIERS = [
   }
 ];
 
-const PRICING_FAQS = [
-  {
-    q: 'Are there any hidden recurring fees or subscriptions?',
-    a: 'No hidden fees. The build price is a one-time project fee. After launch, you own your website and code 100%. Hosting and domain costs are billed directly at cost (approx ₹1,500–₹3,000/year) unless you opt for our optional monthly maintenance retainer.'
-  },
-  {
-    q: 'How does payment work?',
-    a: 'We work on a milestone basis: 50% initial deposit upon project agreement and design sign-off, and 50% upon final testing, deployment, and handover of all admin access.'
-  },
-  {
-    q: 'Can I upgrade from Tier 1 to Tier 2 or 3 later?',
-    a: 'Absolutely! Because our code architecture is clean, modular, and built on FastAPI + React, you can seamlessly add a CMS, reviews widget, or 3D/AI capabilities down the road without throwing away your original site.'
-  },
-  {
-    q: 'What is the Optional Maintenance Retainer?',
-    a: 'For Tier 2 & 3 clients who prefer hands-off peace of mind, we offer a ₹2,999/mo retainer covering high-speed managed cloud hosting, weekly database backups, security patches, and up to 3 hours of content/menu updates each month.'
-  }
-];
-
 export default function Pricing() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const toggleFaq = (idx) => {
-    setOpenFaq(openFaq === idx ? null : idx);
-  };
-
   return (
     <div className="pricing-page">
       {/* Header */}
@@ -184,38 +160,10 @@ export default function Pricing() {
       </section>
 
       {/* FAQ Accordion */}
-      <section className="section-padding" style={{ background: 'rgba(15, 23, 42, 0.4)', borderTop: '1px solid var(--border-subtle)' }}>
-        <div className="container" style={{ maxWidth: '850px' }}>
-          <div className="section-header">
-            <div className="section-tag">Common Questions</div>
-            <h2 className="section-title">Pricing & Process FAQs</h2>
-            <p className="section-subtitle">Everything you need to know before starting your project with AMP Ventures.</p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {PRICING_FAQS.map((faq, idx) => (
-              <div 
-                key={idx} 
-                className="glass-card" 
-                style={{ padding: '1.25rem 1.75rem', cursor: 'pointer' }}
-                onClick={() => toggleFaq(idx)}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 700, fontSize: '1.05rem', color: '#fff' }}>
-                  <span>{faq.q}</span>
-                  <span style={{ fontSize: '1.2rem', color: 'var(--primary-light)' }}>
-                    {openFaq === idx ? '−' : '+'}
-                  </span>
-                </div>
-                {openFaq === idx && (
-                  <p style={{ marginTop: '1rem', color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
-                    {faq.a}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FaqSection 
+        title="Pricing & Process FAQs"
+        subtitle="Everything you need to know before starting your project with AMP Ventures."
+      />
     </div>
   );
 }

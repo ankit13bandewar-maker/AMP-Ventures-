@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MockupGenerator from '../components/MockupGenerator.jsx';
+import FaqSection from '../components/FaqSection.jsx';
 
 const TRUST_BADGES = [
   { icon: '🎓', title: 'IIT Roorkee Certified', desc: 'AI/ML Engineering Standards' },
@@ -13,30 +14,47 @@ const TRANSFORMATION_ITEMS = [
   {
     icon: '📍',
     industry: 'Salons & Luxury Spas',
-    offline: 'Manual phone appointments, empty afternoon slots, and no online review visibility.',
-    online: 'Automated 24/7 WhatsApp slot booking, stylist portfolio showcase, and #1 Google Map ranking.',
-    metric: '+145% weekly bookings'
+    metric: '+145% weekly bookings',
+    offlinePoints: [
+      'Manual calls only',
+      'Empty booking slots',
+      'No online reviews'
+    ],
+    solutionPoints: [
+      '24/7 WhatsApp booking',
+      'Digital photo showcase',
+      'Top Google ranking'
+    ]
   },
   {
     icon: '🍽️',
     industry: 'Restaurants & Cafes',
-    offline: '30% commission loss to delivery apps, printed menu reprint costs, slow table turnover.',
-    online: 'Zero-commission direct QR ordering, 3D interactive specialty dishes, and automated table reservations.',
-    metric: '+210% direct table orders'
-  },
-  {
-    icon: '🩺',
-    industry: 'Clinics & Diagnostics',
-    offline: 'Crowded waiting rooms, lost patient records, missed consultation inquiries.',
-    online: 'Doctor profile portal, pre-appointment symptom triage, and automated SMS/WhatsApp reminders.',
-    metric: '94% reduction in no-shows'
+    metric: '+210% direct table orders',
+    offlinePoints: [
+      'High app commissions',
+      'Costly paper menus',
+      'Slow table turnover'
+    ],
+    solutionPoints: [
+      'Direct QR ordering',
+      '3D food preview',
+      'Instant table booking'
+    ]
   },
   {
     icon: '🛍️',
     industry: 'Retail & Boutiques',
-    offline: 'Sales limited to 500m local walking radius, zero repeat customer database.',
-    online: 'Digital product catalog, WhatsApp direct shopping cart, and automatic seasonal promo broadcasts.',
-    metric: '+180% customer retention'
+    metric: '+180% customer retention',
+    offlinePoints: [
+      'Limited local footfall',
+      'No customer database',
+      'Zero night sales'
+    ],
+    solutionPoints: [
+      'Online product catalog',
+      'WhatsApp direct checkout',
+      'Auto promo alerts'
+    ]
   }
 ];
 
@@ -59,20 +77,23 @@ export default function Home() {
           </p>
 
           {/* Action CTAs */}
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3.5rem' }}>
-            <Link to="/readiness-score" className="btn btn-primary btn-lg">
-              🎯 Check Free Digital Readiness Score
+          <div className="hero-cta-cluster">
+            <Link to="/readiness-score" className="hero-btn hero-btn-primary">
+              <span className="hero-btn-icon">🎯</span>
+              <span>Free Digital Audit Score</span>
             </Link>
-            <Link to="/services" className="btn btn-secondary btn-lg">
-              Explore 3 Service Tiers
+            <Link to="/services" className="hero-btn hero-btn-secondary">
+              <span className="hero-btn-icon">⚡</span>
+              <span>Explore 3 Service Tiers</span>
             </Link>
             <a 
               href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business." 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="btn btn-whatsapp btn-lg"
+              className="hero-btn hero-btn-whatsapp"
             >
-              💬 WhatsApp Consultation
+              <span className="hero-btn-icon">💬</span>
+              <span>WhatsApp Consultation</span>
             </a>
           </div>
 
@@ -128,25 +149,35 @@ export default function Home() {
                 </div>
 
                 <div style={{ marginBottom: '1.25rem' }}>
-                  <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--danger)', fontWeight: 700, marginBottom: '0.35rem' }}>
-                    ❌ The Offline Limitation:
+                  <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--danger)', fontWeight: 700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <span>❌</span> The Offline Limitation:
                   </div>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
-                    {item.offline}
-                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {item.offlinePoints.map((pt, pIdx) => (
+                      <li key={pIdx} style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
+                        <span style={{ color: 'var(--danger)', fontSize: '0.7rem', marginTop: '0.2rem' }}>•</span>
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
                 <div style={{ marginBottom: '1.5rem', flexGrow: 1 }}>
-                  <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--success)', fontWeight: 700, marginBottom: '0.35rem' }}>
-                    ✅ The AMP Ventures Solution:
+                  <div style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--success)', fontWeight: 700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <span>✅</span> The AMP Ventures Solution:
                   </div>
-                  <p style={{ fontSize: '0.92rem', color: '#fff', lineHeight: '1.5', fontWeight: 500 }}>
-                    {item.online}
-                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {item.solutionPoints.map((pt, pIdx) => (
+                      <li key={pIdx} style={{ fontSize: '0.88rem', color: '#fff', fontWeight: 500, display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
+                        <span style={{ color: 'var(--success)', fontSize: '0.75rem', marginTop: '0.15rem' }}>✓</span>
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                <Link to={`/portfolio?industry=${item.industry.toLowerCase().split(' ')[0]}`} className="btn btn-secondary btn-sm" style={{ width: '100%' }}>
-                  View Live Case Study →
+                <Link to="/services" className="btn btn-secondary btn-sm" style={{ width: '100%' }}>
+                  Explore Solution →
                 </Link>
               </div>
             ))}
@@ -243,8 +274,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. Free Digital Readiness Score Banner */}
-      <section className="section-padding" style={{ paddingTop: '2rem', paddingBottom: '5rem' }}>
+      {/* 6. FAQ Accordion */}
+      <FaqSection 
+        title="Frequently Asked Questions" 
+        subtitle="Quick, straightforward answers about our timelines, pricing, code ownership, and tech features." 
+      />
+
+      {/* 7. Free Digital Readiness Score Banner */}
+      <section className="section-padding" style={{ paddingTop: '3rem', paddingBottom: '5rem' }}>
         <div className="container">
           <div className="glass-card" style={{ 
             background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%)',
