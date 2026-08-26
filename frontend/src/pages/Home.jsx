@@ -312,7 +312,7 @@ export default function Home() {
               From Manual Struggles to <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent to-sky-400">Automated Growth</span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base">
-              See how we convert common offline business bottlenecks into scalable automated digital revenue channels.
+              See how going online helps local businesses save time, get more customers, and grow daily revenue.
             </p>
           </div>
 
