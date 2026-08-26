@@ -264,7 +264,7 @@ export default function MockupGenerator() {
       <div className="section-header">
         <div className="section-tag">Instant AI Storefront Engine</div>
         <h2 className="section-title">
-          Live Interactive <span className="text-gradient">Website Simulation</span>
+          Preview What Your Website Could Look Like <span className="text-gradient">— Right Now</span>
         </h2>
         <p className="section-subtitle">
           Customize your business details below and test the interactive booking simulation in real time.
