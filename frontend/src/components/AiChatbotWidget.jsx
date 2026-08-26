@@ -1,20 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bot, X, Send, Sparkles } from 'lucide-react';
+import { Bot, X, Send, Sparkles, Mic, MicOff, RotateCcw, MessageSquare, ArrowUpRight, Volume2 } from 'lucide-react';
 import { getApiUrl } from '../apiConfig';
 
 const INITIAL_MESSAGES = [
   {
     role: 'bot',
-    content: "Hi there! I'm the **AMP Ventures AI Advisor**. Are you looking to launch a high-converting website for your salon, clinic, restaurant, or retail boutique? Ask me anything about our 3 tiers, pricing, or timelines!"
+    content: "Hi! I'm the **AMP Ventures AI Advisor** 🚀\n\nI can help you select the ideal tier for your offline business (Salon, Clinic, Restaurant, Retail), compare package pricing, or estimate deployment timelines. What would you like to explore?",
+    suggested_actions: ["Explore Tiers & Pricing", "Take Free Digital Audit", "WhatsApp Us", "How fast can we launch?"]
   }
 ];
 
 const SUGGESTED_QUESTIONS = [
-  "How much does a website cost?",
-  "What is included in Tier 2?",
+  "How much does Tier 2 cost?",
+  "What's included in Tier 3 (3D + AI)?",
   "How fast can my salon get online?",
-  "Do you handle WhatsApp booking?"
+  "Do you provide WhatsApp booking?",
+  "Can you sync Google Maps & Reviews?"
 ];
 
 export default function AiChatbotWidget() {
@@ -22,8 +24,72 @@ export default function AiChatbotWidget() {
   const [messages, setMessages] = useState(INITIAL_MESSAGES);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [speechSupported, setSpeechSupported] = useState(true);
+  const [voiceToast, setVoiceToast] = useState('');
+  
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const recognitionRef = useRef(null);
   const navigate = useNavigate();
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+        setVoiceToast('Listening... Speak now 🎙️');
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = Array.from(event.results)
+          .map(result => result[0].transcript)
+          .join('');
+        setInput(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.warn('Speech recognition error:', event.error);
+        setIsListening(false);
+        setVoiceToast('Could not capture audio. Please type.');
+        setTimeout(() => setVoiceToast(''), 3000);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+        setTimeout(() => setVoiceToast(''), 2000);
+      };
+
+      recognitionRef.current = recognition;
+    } else {
+      setSpeechSupported(false);
+    }
+  }, []);
+
+  const toggleSpeechRecognition = () => {
+    if (!speechSupported || !recognitionRef.current) {
+      setVoiceToast('Voice input is not supported in this browser.');
+      setTimeout(() => setVoiceToast(''), 3000);
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+      } catch (err) {
+        console.warn("Speech recognition restart:", err);
+      }
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,12 +98,18 @@ export default function AiChatbotWidget() {
   useEffect(() => {
     if (isOpen) {
       scrollToBottom();
+      setTimeout(() => inputRef.current?.focus(), 150);
     }
   }, [messages, isOpen]);
 
   const handleSend = async (textToSend) => {
     const text = (typeof textToSend === 'string' ? textToSend : input).trim();
     if (!text || loading) return;
+
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
 
     const userMsg = { role: 'user', content: text };
     setMessages(prev => [...prev, userMsg]);
@@ -61,7 +133,7 @@ export default function AiChatbotWidget() {
           { 
             role: 'bot', 
             content: data.reply || "I'd be glad to help you pick the best tier for your business.",
-            suggested_actions: data.suggested_actions || []
+            suggested_actions: data.suggested_actions || ["Explore Pricing", "Chat on WhatsApp"]
           }
         ]);
       } else {
@@ -69,23 +141,25 @@ export default function AiChatbotWidget() {
           ...prev, 
           { 
             role: 'bot', 
-            content: "I recommend checking our **Tier 2 (₹24,999)** for dynamic CMS or chatting with us directly on WhatsApp (+91 9876543210).",
-            suggested_actions: ["Chat on WhatsApp", "Explore Pricing"]
+            content: "We provide 3 tiers tailored for offline businesses:\n• **Tier 1 (₹9,999)**: 5-Day Launch\n• **Tier 2 (₹24,999)**: CMS + Reviews\n• **Tier 3 (₹49,999)**: 3D WebGL + AI + WhatsApp API\n\nWould you like to speak directly with our Technical Architect on WhatsApp?",
+            suggested_actions: ["Chat on WhatsApp", "Explore Pricing", "Take Free Audit"]
           }
         ]);
       }
     } catch (e) {
-      // Local graceful fallback
-      let fallbackReply = "Our Tier 1 starts at ₹9,999 (5-7 days), Tier 2 is ₹24,999 with custom CMS (10-12 days), and Tier 3 is ₹49,999 with 3D WebGL and AI automations. Would you like a custom quote?";
+      // Local fallback logic
+      let fallbackReply = "Our Tier 1 starts at ₹9,999 (5-7 days), Tier 2 is ₹24,999 with custom CMS (10-12 days), and Tier 3 is ₹49,999 with 3D WebGL and AI automations. Would you like a personalized quote?";
       if (text.toLowerCase().includes("cost") || text.toLowerCase().includes("price") || text.toLowerCase().includes("tier")) {
-        fallbackReply = "Tier 1: ₹9,999 (4-6 pages static)\nTier 2: ₹24,999 (Custom CMS + Google Reviews)\nTier 3: ₹49,999 (3D WebGL + AI Chatbot + WhatsApp API)\n\nAll packages include 100% code ownership.";
+        fallbackReply = "• **Tier 1 — Basic**: ₹9,999 (Fast 5-Day Setup)\n• **Tier 2 — Premium**: ₹24,999 (Dynamic CMS + Google Maps + Reviews)\n• **Tier 3 — Premium Plus**: ₹49,999 (3D Interactive WebGL + AI Agent + WhatsApp API)\n\nAll tiers come with 100% full source code ownership.";
+      } else if (text.toLowerCase().includes("salon") || text.toLowerCase().includes("clinic") || text.toLowerCase().includes("restaurant")) {
+        fallbackReply = "For offline salons, clinics, and restaurants, we recommend **Tier 2 (₹24,999)** or **Tier 3 (₹49,999)**. They include 1-click WhatsApp appointment/table booking, automated confirmation reminders, and local SEO dominance.";
       }
       setMessages(prev => [
         ...prev, 
         { 
           role: 'bot', 
           content: fallbackReply,
-          suggested_actions: ["Explore Pricing", "Request Quote", "Chat on WhatsApp"]
+          suggested_actions: ["Explore Pricing", "Take Free Audit", "Chat on WhatsApp"]
         }
       ]);
     } finally {
@@ -94,27 +168,53 @@ export default function AiChatbotWidget() {
   };
 
   const handleActionClick = (action) => {
-    if (action.includes("Pricing") || action.includes("Price")) {
+    if (action.includes("Pricing") || action.includes("Price") || action.includes("Tiers")) {
       navigate('/pricing');
       setIsOpen(false);
-    } else if (action.includes("Readiness") || action.includes("Audit")) {
+    } else if (action.includes("Audit") || action.includes("Diagnostic") || action.includes("Readiness")) {
       navigate('/readiness-score');
       setIsOpen(false);
-    } else if (action.includes("Quote") || action.includes("Tier")) {
+    } else if (action.includes("Quote") || action.includes("Project") || action.includes("Contact")) {
       navigate('/contact');
       setIsOpen(false);
     } else if (action.includes("WhatsApp")) {
-      window.open("https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I%20chatted%20with%20your%20AI%20and%20want%20to%20discuss%20a%20project.", "_blank");
+      window.open("https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business.", "_blank");
     } else {
       handleSend(action);
     }
   };
 
+  const handleResetChat = () => {
+    setMessages(INITIAL_MESSAGES);
+    setInput('');
+  };
+
+  // Simple Markdown renderer for **bold** and bullet points
+  const formatBotMessage = (content) => {
+    const lines = content.split('\n');
+    return lines.map((line, lIdx) => {
+      // Parse bold segments **text**
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      const formattedParts = parts.map((part, pIdx) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={pIdx} className="text-white font-bold">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+      });
+
+      return (
+        <span key={lIdx} className="block leading-relaxed">
+          {formattedParts}
+        </span>
+      );
+    });
+  };
+
   return (
     <>
-      {/* Floating Trigger */}
+      {/* Floating Trigger Button */}
       <button 
-        className="floating-btn floating-chatbot bg-gradient-to-br from-indigo-600 via-primary to-indigo-700 text-white shadow-xl shadow-indigo-600/40 hover:scale-110 active:scale-95 transition-all duration-200" 
+        className="floating-btn floating-chatbot text-white" 
         onClick={() => setIsOpen(!isOpen)}
         title="Chat with AMP Ventures AI Advisor"
         aria-label="Toggle AI Chat"
@@ -124,73 +224,149 @@ export default function AiChatbotWidget() {
         ) : (
           <div className="relative flex items-center justify-center">
             <Sparkles className="w-6 h-6 text-white drop-shadow" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-lime-accent rounded-full border-2 border-indigo-700"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-lime-accent rounded-full border-2 border-[#08090d] animate-pulse"></span>
           </div>
         )}
       </button>
 
-      {/* Chat Window */}
+      {/* Modern AI Chatbot Modal */}
       {isOpen && (
-        <div className="chatbot-modal bg-[#0e1118]/95 backdrop-blur-2xl border border-white/[0.1] shadow-2xl rounded-2xl">
+        <div className="chatbot-modal">
+          
           {/* Header */}
-          <div className="chat-header p-4 border-b border-white/[0.08] flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
-                <Sparkles className="w-4 h-4" />
+          <div className="p-4 border-b border-white/[0.08] flex items-center justify-between bg-gradient-to-r from-indigo-950/60 via-[#0e1118] to-[#121622]">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-lime-accent/80 p-[1.5px] shadow-md shadow-indigo-500/20">
+                  <div className="w-full h-full rounded-[10px] bg-[#0c0f17] flex items-center justify-center text-lime-accent">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0e1118]"></span>
               </div>
+              
               <div>
-                <div className="text-sm font-bold text-white">AMP AI Advisor</div>
-                <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
-                  Online • Instant Consultation
+                <div className="text-sm font-extrabold text-white flex items-center gap-1.5">
+                  <span>AMP AI Advisor</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">2.0</span>
+                </div>
+                <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Instant Pricing & Technical Guide
                 </div>
               </div>
             </div>
-            <button 
-              onClick={() => setIsOpen(false)} 
-              className="p-1 rounded-lg text-slate-400 hover:text-white transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={handleResetChat}
+                title="Restart Conversation"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+              <button 
+                onClick={() => setIsOpen(false)} 
+                title="Close Advisor"
+                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
-          {/* Messages Container */}
-          <div className="chat-messages-container p-4 space-y-3 max-h-[350px] overflow-y-auto">
-            {messages.map((m, idx) => (
-              <div key={idx} className={`chat-bubble ${m.role === 'user' ? 'chat-bubble-user bg-indigo-600 text-white ml-auto' : 'chat-bubble-bot bg-[#151a26] text-slate-200 border border-white/[0.08]'}`}>
-                <div className="text-xs leading-relaxed whitespace-pre-line">{m.content}</div>
-                {m.suggested_actions && m.suggested_actions.length > 0 && (
-                  <div className="chat-actions mt-2.5 flex flex-wrap gap-1.5">
-                    {m.suggested_actions.map((act, aIdx) => (
-                      <button 
-                        key={aIdx} 
-                        className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 border border-white/[0.1] transition-all" 
-                        onClick={() => handleActionClick(act)}
-                      >
-                        {act}
-                      </button>
-                    ))}
+          {/* Voice Toast Alert Bar */}
+          {voiceToast && (
+            <div className={`px-4 py-2 text-xs flex items-center justify-between transition-all ${
+              isListening ? 'bg-red-500/20 border-b border-red-500/30 text-red-300' : 'bg-indigo-500/20 border-b border-indigo-500/30 text-indigo-200'
+            }`}>
+              <div className="flex items-center gap-2">
+                {isListening ? (
+                  <div className="flex items-center gap-1">
+                    <span className="speech-wave-bar" style={{ animationDelay: '0s' }}></span>
+                    <span className="speech-wave-bar" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="speech-wave-bar" style={{ animationDelay: '0.4s' }}></span>
                   </div>
+                ) : (
+                  <Sparkles className="w-3.5 h-3.5" />
                 )}
+                <span className="font-medium">{voiceToast}</span>
+              </div>
+              {isListening && (
+                <button 
+                  onClick={toggleSpeechRecognition}
+                  className="text-[10px] uppercase font-bold text-red-400 underline"
+                >
+                  Stop
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* Scrollable Messages Area */}
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3.5 custom-chat-scrollbar bg-[#080a0f]/60">
+            {messages.map((m, idx) => (
+              <div 
+                key={idx} 
+                className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'}`}
+              >
+                <div 
+                  className={`max-w-[88%] p-3.5 rounded-2xl text-xs shadow-md transition-all ${
+                    m.role === 'user' 
+                      ? 'bg-gradient-to-r from-indigo-600 to-indigo-500 text-white rounded-br-xs shadow-indigo-600/20' 
+                      : 'bg-[#121622] text-slate-200 border border-white/[0.08] rounded-bl-xs shadow-black/40'
+                  }`}
+                >
+                  <div className="leading-relaxed">
+                    {m.role === 'bot' ? formatBotMessage(m.content) : m.content}
+                  </div>
+
+                  {/* Interactive Action Chips */}
+                  {m.suggested_actions && m.suggested_actions.length > 0 && (
+                    <div className="mt-3 pt-2.5 border-t border-white/[0.08] flex flex-wrap gap-1.5">
+                      {m.suggested_actions.map((act, aIdx) => (
+                        <button 
+                          key={aIdx} 
+                          className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.06] hover:bg-lime-accent hover:text-slate-950 text-slate-200 border border-white/[0.08] flex items-center gap-1 font-medium transition-all" 
+                          onClick={() => handleActionClick(act)}
+                        >
+                          <span>{act}</span>
+                          <ArrowUpRight className="w-3 h-3 opacity-70" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
 
             {loading && (
-              <div className="chat-bubble chat-bubble-bot bg-[#151a26] text-slate-400 text-xs flex items-center gap-2 border border-white/[0.08]">
-                <span>AI Advisor is typing...</span>
+              <div className="flex items-start">
+                <div className="bg-[#121622] text-slate-400 text-xs px-4 py-3 rounded-2xl rounded-bl-xs border border-white/[0.08] flex items-center gap-2">
+                  <div className="flex gap-1 items-center">
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0s' }}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0.15s' }}></span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0.3s' }}></span>
+                  </div>
+                  <span className="text-[11px]">AI Advisor analyzing request...</span>
+                </div>
               </div>
             )}
+            
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Prompts if conversation is fresh */}
-          {messages.length <= 2 && (
-            <div className="px-4 py-2 flex gap-1.5 overflow-x-auto bg-[#0a0d14]/70 border-t border-white/[0.05]">
+          {/* Quick Prompts Carousel Bar */}
+          {messages.length <= 3 && (
+            <div className="px-3.5 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar bg-[#0b0e16] border-t border-white/[0.06]">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex-shrink-0">
+                Suggestions:
+              </span>
               {SUGGESTED_QUESTIONS.map((q, idx) => (
                 <button 
                   key={idx} 
                   onClick={() => handleSend(q)}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white whitespace-nowrap transition-all"
+                  className="text-[11px] px-3 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-300 hover:text-white whitespace-nowrap transition-all flex-shrink-0"
                 >
                   {q}
                 </button>
@@ -198,26 +374,49 @@ export default function AiChatbotWidget() {
             </div>
           )}
 
-          {/* Input Row */}
+          {/* Input Row with Speech-To-Text Mic */}
           <form 
-            className="chat-input-row p-3 border-t border-white/[0.08] flex items-center gap-2 bg-[#0e1118]"
+            className="p-3 border-t border-white/[0.08] flex items-center gap-2 bg-[#0e1118]"
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
           >
+            {/* Microphone Button */}
+            <button 
+              type="button"
+              onClick={toggleSpeechRecognition}
+              title={isListening ? "Stop Listening" : "Speak to AI Advisor (Speech-to-Text)"}
+              className={`p-2.5 rounded-xl border transition-all flex items-center justify-center ${
+                isListening 
+                  ? 'mic-listening border-red-500 shadow-lg shadow-red-500/40' 
+                  : 'bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white border-white/[0.08]'
+              }`}
+            >
+              {isListening ? (
+                <Mic className="w-4 h-4 text-white" />
+              ) : (
+                <Mic className="w-4 h-4" />
+              )}
+            </button>
+
+            {/* Input Box */}
             <input 
+              ref={inputRef}
               type="text" 
-              placeholder="Ask about pricing, tiers, or advice..."
+              placeholder={isListening ? "Listening to your voice..." : "Ask about pricing, tiers, or advice..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-grow bg-white/[0.05] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="flex-grow bg-white/[0.05] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
+
+            {/* Send Button */}
             <button 
               type="submit" 
-              className="p-2 rounded-xl bg-lime-accent text-slate-950 hover:bg-lime-400 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2.5 rounded-xl bg-lime-accent text-slate-950 hover:bg-lime-400 font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-md shadow-lime-400/20"
               disabled={!input.trim() || loading}
             >
               <Send className="w-3.5 h-3.5" />
             </button>
           </form>
+
         </div>
       )}
     </>
