@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getApiUrl } from '../apiConfig';
 
 const PRESETS = [
   {
@@ -87,7 +88,7 @@ export default function ApiTester({ onExecuteRequest }) {
         }
       }
 
-      const res = await fetch(endpoint, options);
+      const res = await fetch(getApiUrl(endpoint), options);
       const data = await res.json();
       const endTime = performance.now();
       const duration = Math.round(endTime - startTime);

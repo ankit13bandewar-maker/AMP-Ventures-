@@ -2,17 +2,43 @@ import sqlite3
 import os
 import json
 from datetime import datetime, timezone
+from typing import List, Dict, Any, Optional
+from app.config import settings
+from app.logger import logger
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "amp_ventures.db")
 
+# Supabase Client Singleton
+_supabase_client = None
+
+def get_supabase_client():
+    """Retrieve or initialize Supabase client if valid credentials exist."""
+    global _supabase_client
+    if _supabase_client is not None:
+        return _supabase_client
+    
+    url = (settings.SUPABASE_URL or "").strip()
+    key = (settings.SUPABASE_SERVICE_ROLE_KEY or settings.SUPABASE_KEY or "").strip()
+    
+    if url and key and url.startswith("http") and not key.startswith("your_"):
+        try:
+            from supabase import create_client
+            _supabase_client = create_client(url, key)
+            logger.info("Successfully connected to Supabase PostgreSQL database.")
+            return _supabase_client
+        except Exception as e:
+            logger.warning(f"Failed to connect to Supabase: {e}. Falling back to SQLite.")
+            return None
+    return None
+
 def get_db_connection():
-    """Create and return a connection to the SQLite database with row dictionary mapping."""
+    """Create and return a connection to local SQLite database with row dictionary mapping."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
-    """Initialize database tables for leads and readiness checks."""
+    """Initialize local SQLite database tables for leads and readiness checks fallback."""
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -55,11 +81,33 @@ def init_db():
     conn.close()
 
 def insert_lead(name: str, business_name: str, email: str, phone: str, tier: str, budget: str, message: str) -> dict:
-    """Insert a new lead into SQLite database."""
+    """Insert a new lead into Supabase (if configured) or SQLite database."""
+    created_at = datetime.now(timezone.utc).isoformat()
+    client = get_supabase_client()
+    
+    if client:
+        try:
+            payload = {
+                "name": name,
+                "business_name": business_name,
+                "email": email,
+                "phone": phone,
+                "tier": tier,
+                "budget": budget,
+                "message": message,
+                "status": "New",
+                "created_at": created_at
+            }
+            res = client.table("leads").insert(payload).execute()
+            if res.data and len(res.data) > 0:
+                logger.info(f"Lead saved to Supabase with ID: {res.data[0].get('id')}")
+                return res.data[0]
+        except Exception as e:
+            logger.error(f"Supabase lead insertion failed: {e}. Falling back to SQLite.")
+
+    # SQLite Fallback
     conn = get_db_connection()
     cursor = conn.cursor()
-    created_at = datetime.now(timezone.utc).isoformat()
-    
     cursor.execute("""
     INSERT INTO leads (name, business_name, email, phone, tier, budget, message, status, created_at)
     VALUES (?, ?, ?, ?, ?, ?, ?, 'New', ?)
@@ -83,13 +131,63 @@ def insert_lead(name: str, business_name: str, email: str, phone: str, tier: str
     }
 
 def get_all_leads(limit: int = 100) -> list[dict]:
-    """Retrieve all leads ordered by newest first."""
+    """Retrieve all leads ordered by newest first from Supabase or SQLite."""
+    client = get_supabase_client()
+    if client:
+        try:
+            res = client.table("leads").select("*").order("id", desc=True).limit(limit).execute()
+            if res.data is not None:
+                return res.data
+        except Exception as e:
+            logger.error(f"Supabase get_all_leads failed: {e}. Falling back to SQLite.")
+
+    # SQLite Fallback
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM leads ORDER BY id DESC LIMIT ?", (limit,))
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+def update_lead_status(lead_id: int, status: str) -> bool:
+    """Update status of a specific lead."""
+    client = get_supabase_client()
+    if client:
+        try:
+            res = client.table("leads").update({"status": status}).eq("id", lead_id).execute()
+            if res.data:
+                return True
+        except Exception as e:
+            logger.error(f"Supabase update_lead_status failed: {e}. Trying SQLite.")
+
+    # SQLite Fallback
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE leads SET status = ? WHERE id = ?", (status, lead_id))
+    affected = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return affected > 0
+
+def delete_lead(lead_id: int) -> bool:
+    """Delete a lead entry from database."""
+    client = get_supabase_client()
+    if client:
+        try:
+            res = client.table("leads").delete().eq("id", lead_id).execute()
+            if res.data:
+                return True
+        except Exception as e:
+            logger.error(f"Supabase delete_lead failed: {e}. Trying SQLite.")
+
+    # SQLite Fallback
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM leads WHERE id = ?", (lead_id,))
+    affected = cursor.rowcount
+    conn.commit()
+    conn.close()
+    return affected > 0
 
 def insert_readiness_check(
     business_name: str,
@@ -104,10 +202,38 @@ def insert_readiness_check(
     email: str = None,
     phone: str = None
 ) -> dict:
-    """Insert a digital readiness check entry."""
+    """Insert a digital readiness check entry into Supabase or SQLite."""
+    created_at = datetime.now(timezone.utc).isoformat()
+    client = get_supabase_client()
+    
+    if client:
+        try:
+            payload = {
+                "business_name": business_name,
+                "city": city,
+                "industry": industry,
+                "has_website": has_website,
+                "has_google_maps": has_google_maps,
+                "has_social": has_social,
+                "accepts_online_booking": accepts_online_booking,
+                "score": score,
+                "checklist_json": checklist,
+                "email": email,
+                "phone": phone,
+                "created_at": created_at
+            }
+            res = client.table("readiness_checks").insert(payload).execute()
+            if res.data and len(res.data) > 0:
+                row = res.data[0]
+                if "checklist_json" in row and isinstance(row["checklist_json"], list):
+                    row["checklist"] = row["checklist_json"]
+                return row
+        except Exception as e:
+            logger.error(f"Supabase insert_readiness_check failed: {e}. Falling back to SQLite.")
+
+    # SQLite Fallback
     conn = get_db_connection()
     cursor = conn.cursor()
-    created_at = datetime.now(timezone.utc).isoformat()
     checklist_json = json.dumps(checklist)
     
     cursor.execute("""
@@ -136,7 +262,31 @@ def insert_readiness_check(
     }
 
 def get_all_readiness_checks(limit: int = 100) -> list[dict]:
-    """Retrieve all readiness checks."""
+    """Retrieve all readiness checks from Supabase or SQLite."""
+    client = get_supabase_client()
+    if client:
+        try:
+            res = client.table("readiness_checks").select("*").order("id", desc=True).limit(limit).execute()
+            if res.data is not None:
+                results = []
+                for r in res.data:
+                    item = dict(r)
+                    if "checklist_json" in item and item["checklist_json"]:
+                        if isinstance(item["checklist_json"], list):
+                            item["checklist"] = item["checklist_json"]
+                        elif isinstance(item["checklist_json"], str):
+                            try:
+                                item["checklist"] = json.loads(item["checklist_json"])
+                            except Exception:
+                                item["checklist"] = []
+                    else:
+                        item["checklist"] = []
+                    results.append(item)
+                return results
+        except Exception as e:
+            logger.error(f"Supabase get_all_readiness_checks failed: {e}. Falling back to SQLite.")
+
+    # SQLite Fallback
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM readiness_checks ORDER BY id DESC LIMIT ?", (limit,))

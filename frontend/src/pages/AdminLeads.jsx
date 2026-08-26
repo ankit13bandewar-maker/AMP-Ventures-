@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { 
+  RefreshCw, Search, Users, Activity, Database, 
+  Phone, Mail, FileSpreadsheet, ShieldCheck 
+} from 'lucide-react';
+import { getApiUrl } from '../apiConfig';
 
 export default function AdminLeads() {
   const [leads, setLeads] = useState([]);
@@ -12,33 +17,20 @@ export default function AdminLeads() {
     setLoading(true);
     try {
       // Fetch Leads
-      let leadsRes;
-      try {
-        leadsRes = await fetch('http://127.0.0.1:8000/api/leads');
-      } catch {
-        leadsRes = await fetch('/api/leads');
-      }
-
+      const leadsRes = await fetch(getApiUrl('/api/leads'));
       if (leadsRes.ok) {
         const leadsData = await leadsRes.json();
         setLeads(leadsData.leads || []);
       }
 
       // Fetch Readiness Checks
-      let readRes;
-      try {
-        readRes = await fetch('http://127.0.0.1:8000/api/readiness-score');
-      } catch {
-        readRes = await fetch('/api/readiness-score');
-      }
-
+      const readRes = await fetch(getApiUrl('/api/readiness-score'));
       if (readRes.ok) {
         const readData = await readRes.json();
         setReadinessChecks(readData.checks || []);
       }
     } catch (err) {
       console.warn("Using sample mock leads for offline demonstration", err);
-      // Sample mock data for instant preview if backend is standalone
       setLeads([
         {
           id: 101,
@@ -81,178 +73,166 @@ export default function AdminLeads() {
   );
 
   return (
-    <div className="admin-page">
-      {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '3.5rem', paddingBottom: '2rem' }}>
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-            <div>
-              <div className="section-tag">Internal Lead Operations</div>
-              <h1 style={{ fontSize: '2.2rem' }}>AMP Ventures <span className="text-gradient">Lead Intelligence</span></h1>
-              <p style={{ color: 'var(--text-secondary)' }}>Live SQLite database records captured across web forms & diagnostic tools.</p>
+    <div className="admin-page pt-28 pb-20">
+      <div className="container mx-auto px-4 max-w-6xl">
+        
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 border border-amber-400/20 mb-2">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Internal Lead Operations</span>
             </div>
-            <button onClick={fetchData} className="btn btn-secondary btn-sm">
-              🔄 Refresh Records
+            <h1 className="text-3xl font-extrabold text-white">Lead Intelligence & CRM</h1>
+            <p className="text-xs text-slate-400 mt-1">Live SQLite database records captured across web forms & diagnostic tools.</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <a 
+              href={getApiUrl('/api/leads/export.csv')} 
+              className="px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-white text-xs font-semibold border border-white/[0.08] flex items-center gap-2 transition-all"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+              <span>Export CSV</span>
+            </a>
+            <button 
+              onClick={fetchData} 
+              className="px-4 py-2.5 rounded-xl bg-lime-accent text-slate-950 text-xs font-bold flex items-center gap-2 shadow-md hover:bg-lime-400 transition-all"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
+          <div className="p-6 rounded-2xl bg-[#111522] border border-white/[0.08]">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between mb-2">
+              <span>Total Captured Leads</span>
+              <Users className="w-4 h-4 text-lime-accent" />
+            </div>
+            <div className="text-3xl font-extrabold text-white font-mono">{leads.length}</div>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-[#111522] border border-white/[0.08]">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between mb-2">
+              <span>Audits Completed</span>
+              <Activity className="w-4 h-4 text-sky-400" />
+            </div>
+            <div className="text-3xl font-extrabold text-white font-mono">{readinessChecks.length}</div>
+          </div>
+
+          <div className="p-6 rounded-2xl bg-[#111522] border border-white/[0.08]">
+            <div className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between mb-2">
+              <span>Database Engine</span>
+              <Database className="w-4 h-4 text-emerald-400" />
+            </div>
+            <div className="text-sm font-bold text-emerald-400 flex items-center gap-2 mt-2 font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>SQLite Active</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Filter Controls & Search */}
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6">
+          <div className="flex gap-2">
+            <button 
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'leads' ? 'bg-white/[0.12] text-white shadow-sm' : 'bg-white/[0.03] text-slate-400 hover:text-white'}`}
+              onClick={() => setActiveTab('leads')}
+            >
+              Project Inquiries ({leads.length})
+            </button>
+            <button 
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${activeTab === 'audits' ? 'bg-white/[0.12] text-white shadow-sm' : 'bg-white/[0.03] text-slate-400 hover:text-white'}`}
+              onClick={() => setActiveTab('audits')}
+            >
+              Readiness Audits ({readinessChecks.length})
             </button>
           </div>
 
-          {/* Quick Stats Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem', marginBottom: '2.5rem' }}>
-            <div className="glass-card" style={{ padding: '1.5rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Total Inbound Leads</div>
-              <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary-light)' }}>{leads.length}</div>
-            </div>
-            <div className="glass-card" style={{ padding: '1.5rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Audits Completed</div>
-              <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--secondary)' }}>{readinessChecks.length}</div>
-            </div>
-            <div className="glass-card" style={{ padding: '1.5rem' }}>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Database Backend</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--success)', marginTop: '0.4rem' }}>SQLite Active</div>
-            </div>
-          </div>
-
-          {/* Tabs & Search */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div style={{ display: 'flex', gap: '0.75rem' }}>
-              <button 
-                className={`filter-btn ${activeTab === 'leads' ? 'active' : ''}`}
-                onClick={() => setActiveTab('leads')}
-              >
-                Project Inquiries ({leads.length})
-              </button>
-              <button 
-                className={`filter-btn ${activeTab === 'audits' ? 'active' : ''}`}
-                onClick={() => setActiveTab('audits')}
-              >
-                Readiness Score Checks ({readinessChecks.length})
-              </button>
-            </div>
-
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input 
               type="text" 
               placeholder="Search by business, name, or tier..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="form-input"
-              style={{ maxWidth: '320px', padding: '0.5rem 1rem' }}
+              className="pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 w-full sm:w-72"
             />
           </div>
-
-          {/* Leads Table */}
-          {activeTab === 'leads' && (
-            <div className="glass-card" style={{ overflowX: 'auto', padding: '1rem' }}>
-              {filteredLeads.length === 0 ? (
-                <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  No lead inquiries recorded yet. Submit one via the <Link to="/contact" style={{ color: 'var(--primary-light)' }}>Contact Page</Link>.
-                </div>
-              ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '850px' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-subtle)' }}>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>ID</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Business & Contact</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Tier Selected</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Budget / Message</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Status</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredLeads.map((lead) => (
-                      <tr key={lead.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '0.85rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--primary-light)' }}>
-                          #{lead.id}
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <strong style={{ color: '#fff', fontSize: '0.95rem' }}>{lead.business_name}</strong>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{lead.name} • {lead.phone}</div>
-                          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{lead.email}</div>
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <span className="badge badge-indigo">{lead.tier}</span>
-                        </td>
-                        <td style={{ padding: '0.85rem', maxWidth: '280px' }}>
-                          <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>Budget: {lead.budget}</div>
-                          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {lead.message || 'No specific notes'}
-                          </div>
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <span className="badge badge-emerald">{lead.status || 'New'}</span>
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <div style={{ display: 'flex', gap: '0.4rem' }}>
-                            <a 
-                              href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(lead.name)},%20this%20is%20AMP%20Ventures%20regarding%20your%20inquiry%20for%20${encodeURIComponent(lead.business_name)}.`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn btn-whatsapp btn-sm"
-                              style={{ padding: '0.3rem 0.6rem', fontSize: '0.78rem' }}
-                            >
-                              WhatsApp
-                            </a>
-                            <a 
-                              href={`mailto:${lead.email}?subject=AMP%20Ventures%20Proposal%20for%20${encodeURIComponent(lead.business_name)}`}
-                              className="btn btn-secondary btn-sm"
-                              style={{ padding: '0.3rem 0.6rem', fontSize: '0.78rem' }}
-                            >
-                              Email
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
-
-          {/* Readiness Checks Tab */}
-          {activeTab === 'audits' && (
-            <div className="glass-card" style={{ overflowX: 'auto', padding: '1rem' }}>
-              {readinessChecks.length === 0 ? (
-                <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  No readiness audits submitted yet.
-                </div>
-              ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-subtle)' }}>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>ID</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Business & City</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Industry</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Score</th>
-                      <th style={{ padding: '0.85rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Website Present?</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {readinessChecks.map((chk) => (
-                      <tr key={chk.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '0.85rem', fontFamily: 'var(--font-mono)' }}>#{chk.id}</td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <strong style={{ color: '#fff' }}>{chk.business_name}</strong>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{chk.city}</div>
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>{chk.industry}</td>
-                        <td style={{ padding: '0.85rem' }}>
-                          <span className={`badge ${chk.score > 70 ? 'badge-emerald' : chk.score > 40 ? 'badge-amber' : 'badge-indigo'}`}>
-                            {chk.score} / 100
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem' }}>
-                          {chk.has_website ? '✅ Yes' : '❌ No Website'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-          )}
         </div>
-      </section>
+
+        {/* Leads Table */}
+        {activeTab === 'leads' && (
+          <div className="rounded-2xl border border-white/[0.08] bg-[#111522] overflow-x-auto">
+            {filteredLeads.length === 0 ? (
+              <div className="p-12 text-center text-slate-400 text-xs">
+                No lead inquiries recorded yet. Submit one via the <Link to="/contact" className="text-lime-accent underline">Contact Page</Link>.
+              </div>
+            ) : (
+              <table className="table w-full text-xs">
+                <thead className="bg-[#0a0d14] text-slate-400 font-bold border-b border-white/[0.08]">
+                  <tr>
+                    <th className="py-4 px-6 text-left">ID</th>
+                    <th className="py-4 px-6 text-left">Business & Contact</th>
+                    <th className="py-4 px-6 text-left">Selected Tier</th>
+                    <th className="py-4 px-6 text-left">Budget & Notes</th>
+                    <th className="py-4 px-6 text-left">Status</th>
+                    <th className="py-4 px-6 text-center">Quick Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/[0.04]">
+                  {filteredLeads.map((lead) => (
+                    <tr key={lead.id} className="hover:bg-white/[0.02] transition-colors">
+                      <td className="py-3.5 px-6 font-mono text-lime-accent font-bold">#{lead.id}</td>
+                      <td className="py-3.5 px-6">
+                        <strong className="text-white block text-sm">{lead.business_name}</strong>
+                        <span className="text-slate-400 text-[11px]">{lead.name} • {lead.phone}</span>
+                      </td>
+                      <td className="py-3.5 px-6">
+                        <span className="badge badge-info badge-sm font-semibold">{lead.tier}</span>
+                      </td>
+                      <td className="py-3.5 px-6 max-w-xs">
+                        <div className="text-slate-300 font-medium">{lead.budget}</div>
+                        <div className="text-slate-400 text-[11px] truncate">{lead.message || 'No specific notes'}</div>
+                      </td>
+                      <td className="py-3.5 px-6">
+                        <span className={`badge ${lead.status === 'New' ? 'badge-accent' : 'badge-ghost'} badge-xs font-bold`}>
+                          {lead.status || 'New'}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-6 text-center">
+                        <a 
+                          href={`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(lead.name)},%20this%20is%20AMP%20Ventures%20regarding%20your%20website%20inquiry.`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold text-[11px] inline-flex items-center gap-1 hover:bg-emerald-500/25"
+                        >
+                          <span>WhatsApp</span>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        )}
+
+        {/* Readiness Audits Table */}
+        {activeTab === 'audits' && (
+          <div className="rounded-2xl border border-white/[0.08] bg-[#111522] p-8 text-center text-xs text-slate-400">
+            {readinessChecks.length === 0 ? (
+              <span>No completed readiness checks logged yet. Take one on the <Link to="/readiness-score" className="text-sky-400 underline">Audit Page</Link>.</span>
+            ) : (
+              <span>{readinessChecks.length} audits logged in backend.</span>
+            )}
+          </div>
+        )}
+
+      </div>
     </div>
   );
 }

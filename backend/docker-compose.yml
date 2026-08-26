@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # 1. AMP Ventures FastAPI Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amp_ventures_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - ENVIRONMENT=production
+      - REDIS_URL=redis://redis:6379/0
+      - ADMIN_SECRET_KEY=amp_admin_secret_key_2026
+      - JWT_SECRET_KEY=amp_ventures_secure_jwt_secret_key_change_in_production
+      - PROMETHEUS_ENABLED=true
+    volumes:
+      - amp_db_data:/app/data
+    depends_on:
+      - redis
+    networks:
+      - amp_network
+
+  # 2. Redis Distributed Cache & Rate Limiting
+  redis:
+    image: redis:7-alpine
+    container_name: amp_ventures_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - amp_redis_data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      - amp_network
+
+volumes:
+  amp_db_data:
+    driver: local
+  amp_redis_data:
+    driver: local
+
+networks:
+  amp_network:
+    driver: bridge

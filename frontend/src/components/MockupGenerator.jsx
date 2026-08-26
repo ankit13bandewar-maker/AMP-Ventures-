@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { getApiUrl } from '../apiConfig';
 
 const INDUSTRIES = [
   { id: 'salon', label: '✂️ Salon & Luxury Spa', defaultName: 'Luxe Glow Unisex Salon' },
@@ -195,30 +196,16 @@ export default function MockupGenerator() {
     const updatePreview = async () => {
       setLoading(true);
       try {
-        let res;
-        try {
-          res = await fetch('http://127.0.0.1:8000/api/generate-mockup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              business_name: businessName || 'Your Business',
-              city: city || 'Your City',
-              industry: industry,
-              theme_color: themeColor
-            })
-          });
-        } catch {
-          res = await fetch('/api/generate-mockup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              business_name: businessName || 'Your Business',
-              city: city || 'Your City',
-              industry: industry,
-              theme_color: themeColor
-            })
-          });
-        }
+        const res = await fetch(getApiUrl('/api/generate-mockup'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            business_name: businessName || 'Your Business',
+            city: city || 'Your City',
+            industry: industry,
+            theme_color: themeColor
+          })
+        });
 
         if (res && res.ok) {
           const data = await res.json();

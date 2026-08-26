@@ -181,6 +181,7 @@ INDUSTRY_TEMPLATES = {
 }
 
 @router.post("/generate-mockup", response_model=MockupResponse)
+@router.post("/mockup/generate", response_model=MockupResponse)
 async def generate_mockup(payload: MockupRequest):
     """
     Generate instant tailored website preview data for offline business owners.

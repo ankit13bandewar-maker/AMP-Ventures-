@@ -1,16 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends, Query
 from app.models import ReadinessRequest, ReadinessResponse, ChecklistItem
 from app.db import insert_readiness_check, get_all_readiness_checks
+from app.auth import verify_admin_key
+from app.services.rate_limiter import limiter
 from typing import List
 
 router = APIRouter()
 
 @router.post("/readiness-score", response_model=ReadinessResponse)
-async def calculate_readiness_score(payload: ReadinessRequest):
+async def calculate_readiness_score(payload: ReadinessRequest, request: Request):
     """
     Computes a tailored digital readiness maturity score (0-100)
     for offline businesses and returns an actionable missing-presence checklist.
     """
+    limiter.check(request)
     score = 15  # Base score for existing registered business
     checklist: List[ChecklistItem] = []
     
@@ -130,10 +133,11 @@ async def calculate_readiness_score(payload: ReadinessRequest):
         recommended_tier_reason=recommended_tier_reason
     )
 
-@router.get("/readiness-checks")
-async def list_readiness_checks():
+@router.get("/readiness-checks", dependencies=[Depends(verify_admin_key)])
+@router.get("/readiness-score", dependencies=[Depends(verify_admin_key)])
+async def list_readiness_checks(limit: int = Query(100, ge=1, le=500)):
     """Admin endpoint to inspect digital readiness tool submissions."""
-    checks = get_all_readiness_checks(limit=50)
+    checks = get_all_readiness_checks(limit=limit)
     return {
         "total": len(checks),
         "checks": checks

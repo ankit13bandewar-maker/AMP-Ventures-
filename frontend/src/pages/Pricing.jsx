@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Sparkles, Check, ArrowUpRight, ShieldCheck, Clock, Zap } from 'lucide-react';
 import FaqSection from '../components/FaqSection.jsx';
 
 const PRICING_TIERS = [
   {
     id: 'tier1',
     name: 'Tier 1 — Basic',
-    badge: 'Static Web Presence',
+    badge: 'Rapid Launch',
     price: '₹9,999',
     timeline: '5–7 Days Delivery',
     description: 'Perfect for local shops, cafes & clinics needing a fast, professional online storefront.',
@@ -21,13 +22,13 @@ const PRICING_TIERS = [
     ],
     ctaText: 'Get Tier 1 Proposal',
     ctaLink: '/contact?tier=tier1',
-    cardClass: 'tier-card-basic',
-    accentColor: 'var(--tier1-color)'
+    badgeColor: 'badge-ghost',
+    btnClass: 'bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/[0.12]'
   },
   {
     id: 'tier2',
     name: 'Tier 2 — Premium',
-    badge: 'Most Popular',
+    badge: 'Most Popular for Local Growth',
     isPopular: true,
     price: '₹24,999',
     timeline: '10–12 Days Delivery',
@@ -39,18 +40,18 @@ const PRICING_TIERS = [
       'Live Google Reviews Embed Widget',
       'Google Analytics 4 & Traffic Dashboard',
       'Direct WhatsApp Booking CTAs',
-      'Optional ₹2,999/mo Maintenance Retainer',
+      'Optional Maintenance Retainer',
       '60-Day Priority Support'
     ],
     ctaText: 'Start Tier 2 Build',
     ctaLink: '/contact?tier=tier2',
-    cardClass: 'tier-card-premium',
-    accentColor: 'var(--primary-light)'
+    badgeColor: 'badge-info',
+    btnClass: 'bg-sky-400 hover:bg-sky-300 text-slate-950 shadow-lg'
   },
   {
     id: 'tier3',
     name: 'Tier 3 — Premium Plus',
-    badge: 'High-Tech & 3D',
+    badge: '3D WebGL & AI Automation',
     isPlus: true,
     price: '₹49,999',
     timeline: '14–18 Days Delivery',
@@ -66,67 +67,82 @@ const PRICING_TIERS = [
     ],
     ctaText: 'Book Tier 3 Consultation',
     ctaLink: '/contact?tier=tier3',
-    cardClass: 'tier-card-plus',
-    accentColor: '#FCD34D'
+    badgeColor: 'badge-accent',
+    btnClass: 'bg-lime-accent hover:bg-lime-400 text-slate-950 shadow-lg'
   }
 ];
 
 export default function Pricing() {
   return (
-    <div className="pricing-page">
+    <div className="pricing-page pt-28 pb-20">
       {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}>
-        <div className="container text-center">
-          <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-lime-accent mb-6 shadow-inner">
+            <Sparkles className="w-3.5 h-3.5" />
             <span>Transparent Investment</span>
           </div>
-          <h1 className="section-title">
-            Simple, Transparent Pricing For <span className="text-gradient">Real ROI</span>
+          
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Simple, Transparent Pricing For <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-sky-400 to-indigo-400">
+              Measurable Business ROI
+            </span>
           </h1>
-          <p className="section-subtitle" style={{ maxWidth: '720px', margin: '0 auto' }}>
-            Every package is engineered to pay for itself through increased local visibility, customer inquiries, and direct bookings.
+
+          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            Every package is engineered to pay for itself through increased local search visibility, higher customer conversion, and direct WhatsApp bookings.
           </p>
         </div>
       </section>
 
       {/* Pricing Cards Grid */}
-      <section className="section-padding" style={{ paddingTop: '1rem' }}>
-        <div className="container">
-          <div className="pricing-grid">
+      <section className="py-10">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             {PRICING_TIERS.map((tier) => (
-              <div key={tier.id} className={`tier-card ${tier.cardClass}`}>
-                {tier.isPopular && <div className="popular-ribbon">⭐ Most Popular</div>}
-                {tier.isPlus && <div className="gold-ribbon">👑 Premium 3D & AI</div>}
-
-                <div className="tier-header">
-                  <div className="tier-badge" style={{ color: tier.accentColor }}>{tier.badge}</div>
-                  <h3 className="tier-title">{tier.name}</h3>
-                  <p className="tier-desc">{tier.description}</p>
-                </div>
-
-                <div className="tier-price-box">
-                  <div className="tier-price-prefix">One-time investment</div>
-                  <div className="tier-price" style={{ color: tier.isPlus ? '#FCD34D' : '#ffffff' }}>
-                    {tier.price}
+              <div 
+                key={tier.id} 
+                className={`p-8 rounded-3xl bg-[#111522] border ${tier.isPopular ? 'border-sky-400/50 shadow-2xl shadow-sky-500/10 lg:-translate-y-2' : tier.isPlus ? 'border-lime-accent/50 shadow-2xl shadow-lime-accent/10' : 'border-white/[0.08]'} flex flex-col justify-between transition-all`}
+              >
+                <div>
+                  <div className="flex justify-between items-center mb-3">
+                    <span className={`badge ${tier.badgeColor} badge-sm font-bold uppercase tracking-wider`}>
+                      {tier.badge}
+                    </span>
                   </div>
-                  <div className="tier-timeline">⏱️ {tier.timeline}</div>
-                </div>
 
-                <ul className="tier-features">
-                  {tier.features.map((feat, fIdx) => (
-                    <li key={fIdx} className={`feature-item ${fIdx < 3 ? 'highlight' : ''}`}>
-                      <span className="feature-icon-check">✓</span>
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
+                  <h3 className="text-2xl font-extrabold text-white mb-2">{tier.name}</h3>
+                  <p className="text-xs text-slate-400 mb-6 leading-relaxed">{tier.description}</p>
+
+                  <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] mb-6">
+                    <div className="text-xs text-slate-400">Fixed Project Fee</div>
+                    <div className="text-4xl font-extrabold text-white font-mono my-1">{tier.price}</div>
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-1">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      <span>{tier.timeline}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 mb-8">
+                    <div className="text-xs font-bold uppercase tracking-wider text-slate-300">Deliverables Included:</div>
+                    <ul className="space-y-2.5">
+                      {tier.features.map((feat, fIdx) => (
+                        <li key={fIdx} className="flex items-start gap-2.5 text-xs text-slate-300">
+                          <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${tier.isPopular ? 'text-sky-400' : tier.isPlus ? 'text-lime-accent' : 'text-slate-400'}`} />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
                 <Link 
                   to={tier.ctaLink} 
-                  className={`btn ${tier.isPopular ? 'btn-primary' : 'btn-secondary'}`}
-                  style={{ width: '100%', marginTop: 'auto' }}
+                  className={`w-full py-3.5 rounded-xl font-bold text-xs text-center flex items-center justify-center gap-2 transition-all ${tier.btnClass}`}
                 >
-                  {tier.ctaText} →
+                  <span>{tier.ctaText}</span>
+                  <ArrowUpRight className="w-4 h-4" />
                 </Link>
               </div>
             ))}
@@ -134,36 +150,13 @@ export default function Pricing() {
         </div>
       </section>
 
-      {/* Retainer Banner */}
-      <section className="section-padding" style={{ paddingTop: '1rem', paddingBottom: '3.5rem' }}>
-        <div className="container">
-          <div className="glass-card" style={{ padding: '2.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ maxWidth: '680px' }}>
-              <div className="badge badge-emerald" style={{ marginBottom: '0.75rem' }}>Optional Peace of Mind</div>
-              <h3 style={{ fontSize: '1.6rem', marginBottom: '0.5rem' }}>Monthly Agency Maintenance Retainer</h3>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
-                Never worry about server down-time, domain renewals, or broken links. For <strong>₹2,999/month</strong>, our engineering team manages your hosting, updates menus and banner graphics, monitors SEO rankings, and provides priority technical support.
-              </p>
-            </div>
-            <div>
-              <a 
-                href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20learn%20more%20about%20the%20Monthly%20Maintenance%20Retainer."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-whatsapp"
-              >
-                Inquire About Retainer
-              </a>
-            </div>
-          </div>
+      {/* FAQ Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <FaqSection />
         </div>
       </section>
 
-      {/* FAQ Accordion */}
-      <FaqSection 
-        title="Pricing & Process FAQs"
-        subtitle="Everything you need to know before starting your project with AMP Ventures."
-      />
     </div>
   );
 }

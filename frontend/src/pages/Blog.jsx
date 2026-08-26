@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Sparkles, Clock, ArrowUpRight, X, BookOpen } from 'lucide-react';
 
 const BLOG_POSTS = [
   {
@@ -68,57 +69,65 @@ export default function Blog() {
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   return (
-    <div className="blog-page">
+    <div className="blog-page pt-28 pb-20">
       {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}>
-        <div className="container text-center">
-          <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-lime-accent mb-6 shadow-inner">
+            <BookOpen className="w-3.5 h-3.5" />
             <span>Growth Knowledge Hub</span>
           </div>
-          <h1 className="section-title">
-            Offline-to-Online <span className="text-gradient">Growth Insights</span>
+          
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Offline-to-Online <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-sky-400 to-indigo-400">
+              Growth Insights & Playbooks
+            </span>
           </h1>
-          <p className="section-subtitle" style={{ maxWidth: '720px', margin: '0 auto' }}>
-            Practical, fluff-free guides and case studies on engineering sustainable digital growth for brick-and-mortar retail and service businesses.
+
+          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            Practical, fluff-free guides and engineering breakdowns on turning local walk-ins into predictable automated digital revenue.
           </p>
         </div>
       </section>
 
       {/* Blog Cards Grid */}
-      <section className="section-padding" style={{ paddingTop: '1rem' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+      <section className="py-8">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BLOG_POSTS.map((post) => (
-              <div key={post.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div style={{ 
-                  height: '160px', 
-                  backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.85) 100%), url(${post.image})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  display: 'flex', 
-                  alignItems: 'flex-end', 
-                  padding: '1.25rem',
-                  position: 'relative'
-                }}>
-                  <span className="badge" style={{ background: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>
-                    {post.category}
-                  </span>
-                </div>
-                <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-                    <span>{post.date}</span>
-                    <span>⏱️ {post.readTime}</span>
-                  </div>
-                  <h3 style={{ fontSize: '1.2rem', marginBottom: '0.75rem', lineHeight: '1.35' }}>{post.title}</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.5rem', flexGrow: 1 }}>
-                    {post.excerpt}
-                  </p>
-                  <button 
-                    className="btn btn-secondary btn-sm"
-                    style={{ width: '100%' }}
-                    onClick={() => setSelectedArticle(post)}
+              <div key={post.id} className="rounded-3xl bg-[#111522] border border-white/[0.08] overflow-hidden flex flex-col justify-between hover:border-white/[0.2] transition-all">
+                <div>
+                  <div 
+                    className="h-44 bg-cover bg-center p-4 flex items-end relative"
+                    style={{ backgroundImage: `linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(17, 21, 34, 0.95) 100%), url(${post.image})` }}
                   >
-                    Read Guide Summary →
+                    <span className="badge badge-neutral text-xs font-semibold backdrop-blur-md bg-black/60 text-white border border-white/[0.15]">
+                      {post.category}
+                    </span>
+                  </div>
+
+                  <div className="p-6 space-y-3">
+                    <div className="flex justify-between items-center text-[11px] text-slate-400">
+                      <span>{post.date}</span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-slate-500" />
+                        {post.readTime}
+                      </span>
+                    </div>
+
+                    <h3 className="text-base font-bold text-white leading-snug">{post.title}</h3>
+                    <p className="text-xs text-slate-400 leading-relaxed">{post.excerpt}</p>
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0">
+                  <button 
+                    onClick={() => setSelectedArticle(post)}
+                    className="w-full py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.12] text-xs font-semibold text-white border border-white/[0.08] transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <span>Read Executive Summary</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -128,16 +137,21 @@ export default function Blog() {
       </section>
 
       {/* Free Audit CTA Strip */}
-      <section className="section-padding" style={{ paddingTop: '1rem', paddingBottom: '4rem' }}>
-        <div className="container">
-          <div className="glass-card" style={{ padding: '2.5rem', textAlign: 'center', background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(15,23,42,0.9) 100%)', border: '1px solid var(--border-glow)' }}>
-            <h2 style={{ fontSize: '1.8rem', marginBottom: '0.75rem' }}>Want a Personalized Growth Roadmap for Your Shop?</h2>
-            <p style={{ color: 'var(--text-secondary)', maxWidth: '650px', margin: '0 auto 1.5rem', fontSize: '0.95rem' }}>
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="p-8 lg:p-12 rounded-3xl bg-gradient-to-br from-[#151a26] to-[#0e1118] border border-white/[0.1] text-center space-y-6">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">Want a Personalized Growth Architecture for Your Business?</h2>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
               Run our free Digital Readiness Score tool or book a 1-on-1 strategy call with our Lead Architect today.
             </p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link to="/readiness-score" className="btn btn-primary">Take Free Readiness Audit</Link>
-              <Link to="/contact" className="btn btn-secondary">Get Custom Proposal</Link>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Link to="/readiness-score" className="px-6 py-3 rounded-full bg-lime-accent text-slate-950 font-bold text-xs shadow-lg flex items-center gap-2">
+                <span>Take Free Audit</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+              <Link to="/contact" className="px-6 py-3 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-white text-xs font-semibold border border-white/[0.1]">
+                Request Custom Proposal
+              </Link>
             </div>
           </div>
         </div>
@@ -145,42 +159,46 @@ export default function Blog() {
 
       {/* Quick Article Modal */}
       {selectedArticle && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0, 0, 0, 0.8)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '1.5rem'
-        }}>
-          <div className="glass-card" style={{ maxWidth: '620px', width: '100%', padding: '2.5rem', maxHeight: '85vh', overflowY: 'auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-              <span className="badge badge-indigo">{selectedArticle.category}</span>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="p-8 rounded-3xl bg-[#111522] border border-white/[0.1] shadow-2xl max-w-xl w-full space-y-5 max-h-[85vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <span className="badge badge-accent badge-sm font-semibold">{selectedArticle.category}</span>
               <button 
                 onClick={() => setSelectedArticle(null)}
-                style={{ background: 'transparent', border: 'none', color: '#fff', fontSize: '1.4rem', cursor: 'pointer' }}
+                className="p-1 text-slate-400 hover:text-white"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
-            <h2 style={{ fontSize: '1.6rem', marginBottom: '1rem' }}>{selectedArticle.title}</h2>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+
+            <h2 className="text-xl font-bold text-white">{selectedArticle.title}</h2>
+            <div className="text-xs text-slate-400">
               By {selectedArticle.author} • {selectedArticle.date} • {selectedArticle.readTime}
             </div>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: '1.25rem' }}>
+
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               {selectedArticle.excerpt}
             </p>
-            <p style={{ color: '#fff', fontSize: '0.95rem', lineHeight: '1.7', marginBottom: '1.75rem' }}>
+            
+            <p className="text-xs sm:text-sm text-white leading-relaxed bg-white/[0.02] p-4 rounded-xl border border-white/[0.05]">
               In today's hyper-local economy, physical foot traffic is increasingly decided on smartphones before the customer ever steps out of their house. Having a fast, high-converting digital storefront ensures that when local buyers search on Google or Instagram, your business wins the first impression and the booking.
             </p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <Link to="/contact" className="btn btn-primary" style={{ flexGrow: 1 }} onClick={() => setSelectedArticle(null)}>
-                Implement This Strategy With Us →
+
+            <div className="flex gap-3 pt-2">
+              <Link 
+                to="/contact" 
+                className="flex-grow py-3 rounded-xl bg-lime-accent text-slate-950 font-bold text-xs text-center shadow-md flex items-center justify-center gap-1.5"
+                onClick={() => setSelectedArticle(null)}
+              >
+                <span>Implement This Setup With Us</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
-              <button className="btn btn-secondary" onClick={() => setSelectedArticle(null)}>Close</button>
+              <button 
+                className="px-4 py-3 rounded-xl bg-white/[0.08] text-white text-xs font-semibold" 
+                onClick={() => setSelectedArticle(null)}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

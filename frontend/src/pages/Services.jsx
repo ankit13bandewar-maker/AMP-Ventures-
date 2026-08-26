@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { 
+  Sparkles, Check, ArrowUpRight, Zap, Layers, 
+  Bot, Globe, Database, ShieldCheck, Clock, MessageSquare 
+} from 'lucide-react';
 
 const SERVICES_DATA = [
   {
@@ -9,8 +13,8 @@ const SERVICES_DATA = [
     tagline: 'Clean, lightning-fast web presence to build immediate local credibility.',
     startingPrice: '₹9,999',
     timeline: '5–7 Business Days',
-    badgeColor: 'var(--tier1-color)',
-    idealFor: 'Local retail shops, solo salons, small cafes, single-doctor clinics wanting a professional online card.',
+    badgeColor: 'badge-ghost',
+    idealFor: 'Local retail shops, solo salons, small cafes, single-doctor clinics wanting a professional online presence.',
     highlights: [
       '4–6 Custom Designed Responsive Pages (Home, About, Services, Gallery, Contact)',
       'Google Business Profile integration & Google Map embedding',
@@ -19,7 +23,7 @@ const SERVICES_DATA = [
       'Free SSL Security Certificate & DNS / domain setup assistance',
       'Basic On-Page SEO (Meta tags, OpenGraph previews, sitemap.xml)'
     ],
-    techStack: 'HTML5, Modern CSS, React/Vite, Fast CDN',
+    techStack: 'HTML5, Modern CSS, React Vite, Fast CDN',
     ctaLink: '/contact?tier=tier1'
   },
   {
@@ -29,7 +33,7 @@ const SERVICES_DATA = [
     tagline: 'Dynamic platform allowing you to edit menus, prices, and gallery photos with zero code.',
     startingPrice: '₹24,999',
     timeline: '10–12 Business Days',
-    badgeColor: 'var(--primary-light)',
+    badgeColor: 'badge-info',
     isPopular: true,
     idealFor: 'Growing restaurants with seasonal menus, busy salons with stylist rosters, wellness clinics, and specialty retail.',
     highlights: [
@@ -50,7 +54,7 @@ const SERVICES_DATA = [
     tagline: 'Futuristic digital experience with interactive 3D elements, AI chatbot, and WhatsApp Business API.',
     startingPrice: '₹49,999',
     timeline: '14–18 Business Days',
-    badgeColor: 'var(--tier3-color)',
+    badgeColor: 'badge-accent',
     isPlus: true,
     idealFor: 'High-end fine dining, luxury aesthetics clinics, multi-location brands, and premium experience venues.',
     highlights: [
@@ -68,17 +72,17 @@ const SERVICES_DATA = [
 
 const MATRIX_FEATURES = [
   { name: 'Number of Pages', t1: '4–6 Pages', t2: 'Up to 12 Pages', t3: 'Custom / Scalable' },
-  { name: 'Mobile First & Responsive', t1: '✓ Yes', t2: '✓ Yes', t3: '✓ Yes (Ultra-responsive)' },
-  { name: 'Google Business Profile Sync', t1: '✓ Yes', t2: '✓ Yes', t3: '✓ Yes + Priority Map SEO' },
-  { name: 'Contact Form to Email', t1: '✓ Yes', t2: '✓ Yes', t3: '✓ Yes + SMS / WhatsApp alerts' },
-  { name: 'Client CMS Dashboard', t1: '—', t2: '✓ Lightweight CMS', t3: '✓ Full Custom CMS Portal' },
-  { name: 'Live Google Reviews Widget', t1: '—', t2: '✓ Included', t3: '✓ Included + Filtered' },
-  { name: 'Google Analytics & Traffic Insights', t1: '—', t2: '✓ Included', t3: '✓ Advanced Conversion Funnels' },
-  { name: 'WhatsApp Click-to-Chat', t1: '✓ Basic wa.me link', t2: '✓ Dynamic pre-fill triggers', t3: '✓ WhatsApp Cloud API Automation' },
-  { name: '3D Interactive / WebGL Hero', t1: '—', t2: '—', t3: '✓ Custom 3D Interactive Model' },
-  { name: 'AI Conversational Chatbot', t1: '—', t2: '—', t3: '✓ 24/7 AI Lead Gen Assistant' },
-  { name: 'Centralized Lead Management Portal', t1: '—', t2: '—', t3: '✓ Included' },
-  { name: 'Support SLA & Retainer Option', t1: '30 Days Warranty', t2: 'Priority Email + Retainer', t3: 'VIP 24h SLA + Dedicated Manager' },
+  { name: 'Mobile First & Responsive', t1: 'Yes', t2: 'Yes', t3: 'Yes (Ultra-responsive)' },
+  { name: 'Google Business Profile Sync', t1: 'Yes', t2: 'Yes', t3: 'Yes + Priority Map SEO' },
+  { name: 'Contact Form to Email', t1: 'Yes', t2: 'Yes', t3: 'Yes + SMS / WhatsApp alerts' },
+  { name: 'Client CMS Dashboard', t1: '—', t2: 'Lightweight CMS', t3: 'Full Custom CMS Portal' },
+  { name: 'Live Google Reviews Widget', t1: '—', t2: 'Included', t3: 'Included + Filtered' },
+  { name: 'Google Analytics & Insights', t1: '—', t2: 'Included', t3: 'Advanced Funnels' },
+  { name: 'WhatsApp Click-to-Chat', t1: 'Basic wa.me link', t2: 'Dynamic pre-fills', t3: 'WhatsApp Cloud API' },
+  { name: '3D Interactive / WebGL Hero', t1: '—', t2: '—', t3: 'Custom 3D Model' },
+  { name: 'AI Conversational Chatbot', t1: '—', t2: '—', t3: '24/7 AI Assistant' },
+  { name: 'Lead Management Portal', t1: '—', t2: '—', t3: 'Included' },
+  { name: 'Support SLA & Retainer', t1: '30 Days Warranty', t2: 'Priority Email + Retainer', t3: 'VIP 24h SLA + Dedicated Manager' },
 ];
 
 export default function Services() {
@@ -92,125 +96,127 @@ export default function Services() {
   }, [location]);
 
   return (
-    <div className="services-page">
+    <div className="services-page pt-28 pb-20">
       {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}>
-        <div className="container text-center">
-          <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
-            <span>Tailored Architecture</span>
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-sky-400 mb-6 shadow-inner">
+            <Zap className="w-3.5 h-3.5" />
+            <span>Tailored Architecture & Solutions</span>
           </div>
-          <h1 className="section-title">
-            Engineered Web Solutions For <span className="text-gradient">Offline Leaders</span>
+          
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Engineering Packages Engineered for <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-lime-accent">
+              Measurable Local ROI
+            </span>
           </h1>
-          <p className="section-subtitle" style={{ maxWidth: '750px', margin: '0 auto' }}>
-            We do not sell generic cookie-cutter templates. Every website is custom coded to convert local visitors into paying customers.
+
+          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            From rapid 5-day launches to immersive 3D interactive experiences, we provide clean, predictable development packages designed for offline businesses.
           </p>
         </div>
       </section>
 
-      {/* Deep-Dive Tier Cards */}
-      <section className="section-padding" style={{ paddingTop: '1rem' }}>
-        <div className="container">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
-            {SERVICES_DATA.map((tier) => (
-              <div 
-                key={tier.id} 
-                id={tier.id} 
-                className="glass-card" 
-                style={{ 
-                  padding: '2.5rem',
-                  border: tier.isPopular ? '2px solid var(--primary)' : tier.isPlus ? '1px solid rgba(245,158,11,0.4)' : '1px solid var(--border-subtle)',
-                  boxShadow: tier.isPopular ? 'var(--shadow-glow)' : tier.isPlus ? 'var(--shadow-gold)' : 'var(--shadow-md)'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '2rem' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                      <span className="badge" style={{ color: tier.badgeColor, background: 'rgba(255,255,255,0.06)' }}>
-                        {tier.tierNumber}
-                      </span>
-                      {tier.isPopular && <span className="badge badge-indigo">⭐ Most Popular</span>}
-                      {tier.isPlus && <span className="badge badge-amber">👑 Enterprise Grade</span>}
+      {/* 3 Detailed Service Cards */}
+      <section className="py-10">
+        <div className="container mx-auto px-4 max-w-6xl space-y-12">
+          {SERVICES_DATA.map((srv) => (
+            <div 
+              id={srv.id} 
+              key={srv.id} 
+              className={`p-8 lg:p-12 rounded-3xl bg-[#111522] border ${srv.isPopular ? 'border-sky-400/50 shadow-2xl shadow-sky-500/10' : srv.isPlus ? 'border-lime-accent/50 shadow-2xl shadow-lime-accent/10' : 'border-white/[0.08]'} transition-all`}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <div className="lg:col-span-5 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <span className={`badge ${srv.badgeColor} badge-sm font-bold uppercase tracking-wider`}>
+                      {srv.tierNumber}
+                    </span>
+                    {srv.isPopular && <span className="text-xs font-bold text-sky-400">Most Popular</span>}
+                    {srv.isPlus && <span className="text-xs font-bold text-lime-accent">Next-Gen Tech</span>}
+                  </div>
+
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{srv.name}</h2>
+                  <p className="text-slate-400 text-sm leading-relaxed">{srv.tagline}</p>
+
+                  <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1">
+                    <div className="text-xs text-slate-400">Investment starting at</div>
+                    <div className="text-3xl font-extrabold text-white font-mono">{srv.startingPrice}</div>
+                    <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-1">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
+                      <span>{srv.timeline}</span>
                     </div>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{tier.name}</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '680px' }}>{tier.tagline}</p>
                   </div>
 
-                  <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Starting from</div>
-                    <div style={{ fontSize: '2.4rem', fontWeight: 800, color: tier.isPlus ? '#FCD34D' : '#ffffff' }}>{tier.startingPrice}</div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>⏱️ {tier.timeline}</div>
+                  <div className="text-xs text-slate-400 bg-[#0a0d14] p-4 rounded-xl border border-white/[0.04]">
+                    <strong className="text-slate-200 block mb-1">Ideal For:</strong>
+                    {srv.idealFor}
+                  </div>
+
+                  <Link 
+                    to={srv.ctaLink} 
+                    className={`w-full py-3.5 rounded-xl font-bold text-sm text-center shadow-lg flex items-center justify-center gap-2 transition-all ${
+                      srv.isPopular ? 'bg-sky-400 hover:bg-sky-300 text-slate-950' : srv.isPlus ? 'bg-lime-accent hover:bg-lime-400 text-slate-950' : 'bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/[0.1]'
+                    }`}
+                  >
+                    <span>Request {srv.tierNumber} Setup</span>
+                    <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                <div className="lg:col-span-7 space-y-6">
+                  <h3 className="text-base font-bold text-white uppercase tracking-wider text-xs border-b border-white/[0.08] pb-2">
+                    Included Architecture Deliverables:
+                  </h3>
+                  
+                  <ul className="space-y-3">
+                    {srv.highlights.map((h, hIdx) => (
+                      <li key={hIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
+                        <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${srv.isPopular ? 'text-sky-400' : srv.isPlus ? 'text-lime-accent' : 'text-slate-400'}`} />
+                        <span>{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-between">
+                    <span><strong>Stack:</strong> {srv.techStack}</span>
+                    <span className="text-emerald-400 font-semibold font-mono">100% Owned</span>
                   </div>
                 </div>
 
-                {/* Ideal For Note */}
-                <div style={{ background: 'rgba(15, 23, 42, 0.7)', padding: '1rem 1.25rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', marginBottom: '1.75rem' }}>
-                  <span style={{ fontWeight: 700, color: 'var(--primary-light)', fontSize: '0.88rem' }}>🎯 Ideal For: </span>
-                  <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{tier.idealFor}</span>
-                </div>
-
-                {/* Deliverables Checklist */}
-                <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>What is Included:</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '0.85rem', marginBottom: '2rem' }}>
-                  {tier.highlights.map((h, hIdx) => (
-                    <div key={hIdx} style={{ display: 'flex', gap: '0.65rem', alignItems: 'flex-start', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
-                      <span style={{ color: 'var(--success)', fontWeight: 800 }}>✓</span>
-                      <span>{h}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Footer of card */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    <strong>Tech Backbone:</strong> {tier.techStack}
-                  </div>
-                  <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    <Link to={tier.ctaLink} className={`btn ${tier.isPopular ? 'btn-primary' : 'btn-secondary'}`}>
-                      Select {tier.tierNumber} & Get Quote →
-                    </Link>
-                    <a 
-                      href={`https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'm%20interested%20in%20${encodeURIComponent(tier.name)}.`}
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="btn btn-whatsapp btn-sm"
-                    >
-                      WhatsApp
-                    </a>
-                  </div>
-                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Feature Comparison Matrix Table */}
-      <section className="section-padding">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-tag">Feature Matrix</div>
-            <h2 className="section-title">Technical Tier Comparison</h2>
-            <p className="section-subtitle">A granular look at the features and capabilities across all 3 tiers.</p>
+      {/* Feature Matrix Comparison Table */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-extrabold text-white mb-3">Feature Comparison Matrix</h2>
+            <p className="text-slate-400 text-sm">Detailed side-by-side breakdown of all deliverables across our 3 tiers.</p>
           </div>
 
-          <div className="glass-card" style={{ overflowX: 'auto', padding: '1.5rem' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
-              <thead>
-                <tr style={{ borderBottom: '2px solid var(--border-subtle)' }}>
-                  <th style={{ padding: '1rem', fontSize: '0.95rem', color: 'var(--text-primary)' }}>Feature / Capability</th>
-                  <th style={{ padding: '1rem', fontSize: '0.95rem', color: 'var(--tier1-color)' }}>Tier 1: Basic</th>
-                  <th style={{ padding: '1rem', fontSize: '0.95rem', color: 'var(--primary-light)' }}>Tier 2: Premium (CMS)</th>
-                  <th style={{ padding: '1rem', fontSize: '0.95rem', color: '#FCD34D' }}>Tier 3: Premium Plus (3D)</th>
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#111522]">
+            <table className="table w-full text-xs sm:text-sm">
+              <thead className="bg-[#0a0d14] text-slate-300 font-bold border-b border-white/[0.08]">
+                <tr>
+                  <th className="py-4 px-6 text-left">Platform Capabilities</th>
+                  <th className="py-4 px-6 text-center text-slate-400">Tier 1 (Basic)</th>
+                  <th className="py-4 px-6 text-center text-sky-400">Tier 2 (CMS)</th>
+                  <th className="py-4 px-6 text-center text-lime-accent">Tier 3 (3D & AI)</th>
                 </tr>
               </thead>
-              <tbody>
-                {MATRIX_FEATURES.map((row, idx) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <td style={{ padding: '1rem', fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>{row.name}</td>
-                    <td style={{ padding: '1rem', fontSize: '0.88rem', color: 'var(--text-secondary)' }}>{row.t1}</td>
-                    <td style={{ padding: '1rem', fontSize: '0.88rem', color: 'var(--text-secondary)', fontWeight: row.t2.startsWith('✓') ? 600 : 400 }}>{row.t2}</td>
-                    <td style={{ padding: '1rem', fontSize: '0.88rem', color: '#fff', fontWeight: 600 }}>{row.t3}</td>
+              <tbody className="divide-y divide-white/[0.04]">
+                {MATRIX_FEATURES.map((feat, fIdx) => (
+                  <tr key={fIdx} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3.5 px-6 font-semibold text-white">{feat.name}</td>
+                    <td className="py-3.5 px-6 text-center text-slate-400">{feat.t1}</td>
+                    <td className="py-3.5 px-6 text-center text-sky-300 font-medium">{feat.t2}</td>
+                    <td className="py-3.5 px-6 text-center text-lime-accent font-semibold">{feat.t3}</td>
                   </tr>
                 ))}
               </tbody>
@@ -218,6 +224,7 @@ export default function Services() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }

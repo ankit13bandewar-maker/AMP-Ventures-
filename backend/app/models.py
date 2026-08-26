@@ -10,12 +10,16 @@ class ContactRequest(BaseModel):
     tier: str = Field(default="Tier 1 - Basic (Static Website)", example="Tier 2 - Premium")
     budget: Optional[str] = Field(default="Standard", example="₹15,000 - ₹30,000")
     message: Optional[str] = Field(default="", example="We want a website with online ordering and Google map sync.")
+    hp_field: Optional[str] = Field(default="", description="Honeypot field for anti-spam")
 
 class ContactResponse(BaseModel):
     success: bool
     message: str
     lead_id: int
     data: dict
+
+class LeadStatusUpdateRequest(BaseModel):
+    status: str = Field(..., example="Contacted")
 
 # Readiness Score Tool Models
 class ReadinessRequest(BaseModel):

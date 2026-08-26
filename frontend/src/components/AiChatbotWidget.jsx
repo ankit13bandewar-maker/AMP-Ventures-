@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bot, X, Send, Sparkles } from 'lucide-react';
+import { getApiUrl } from '../apiConfig';
 
 const INITIAL_MESSAGES = [
   {
     role: 'bot',
-    content: "👋 Hi there! I'm the **AMP Ventures AI Advisor**. Are you looking to launch a website for your salon, clinic, restaurant, or retail store? Ask me anything about our 3 tiers, pricing, or timelines!"
+    content: "Hi there! I'm the **AMP Ventures AI Advisor**. Are you looking to launch a high-converting website for your salon, clinic, restaurant, or retail boutique? Ask me anything about our 3 tiers, pricing, or timelines!"
   }
 ];
 
@@ -43,7 +45,7 @@ export default function AiChatbotWidget() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/chatbot', {
+      const response = await fetch(getApiUrl('/api/chatbot'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -58,32 +60,34 @@ export default function AiChatbotWidget() {
           ...prev, 
           { 
             role: 'bot', 
-            content: data.reply,
-            suggested_actions: data.suggested_actions,
-            recommended_tier: data.recommended_tier
+            content: data.reply || "I'd be glad to help you pick the best tier for your business.",
+            suggested_actions: data.suggested_actions || []
           }
         ]);
       } else {
-        throw new Error("Chatbot API error");
-      }
-    } catch (err) {
-      // Friendly local fallback logic
-      setTimeout(() => {
-        let fallbackReply = "AMP Ventures specializes in converting local offline businesses into digital leaders! Our 3 service tiers range from Tier 1 (₹9,999 Basic Static) to Tier 2 (₹24,999 CMS + Reviews) and Tier 3 (₹49,999 3D + WhatsApp Automation).";
-        if (text.toLowerCase().includes("cost") || text.toLowerCase().includes("price")) {
-          fallbackReply = "Our pricing is transparent:\n• Tier 1 (Basic): ₹9,999\n• Tier 2 (Premium + CMS): ₹24,999\n• Tier 3 (Premium Plus 3D): ₹49,999\nWould you like a custom proposal?";
-        } else if (text.toLowerCase().includes("time") || text.toLowerCase().includes("fast")) {
-          fallbackReply = "We deliver rapid turnarounds: 5–7 business days for Tier 1, 10–12 days for Tier 2, and 14–18 days for Tier 3 3D & Automation builds.";
-        }
         setMessages(prev => [
-          ...prev,
-          {
-            role: 'bot',
-            content: fallbackReply,
-            suggested_actions: ["Get Custom Quote", "Check Digital Readiness"]
+          ...prev, 
+          { 
+            role: 'bot', 
+            content: "I recommend checking our **Tier 2 (₹24,999)** for dynamic CMS or chatting with us directly on WhatsApp (+91 9876543210).",
+            suggested_actions: ["Chat on WhatsApp", "Explore Pricing"]
           }
         ]);
-      }, 500);
+      }
+    } catch (e) {
+      // Local graceful fallback
+      let fallbackReply = "Our Tier 1 starts at ₹9,999 (5-7 days), Tier 2 is ₹24,999 with custom CMS (10-12 days), and Tier 3 is ₹49,999 with 3D WebGL and AI automations. Would you like a custom quote?";
+      if (text.toLowerCase().includes("cost") || text.toLowerCase().includes("price") || text.toLowerCase().includes("tier")) {
+        fallbackReply = "Tier 1: ₹9,999 (4-6 pages static)\nTier 2: ₹24,999 (Custom CMS + Google Reviews)\nTier 3: ₹49,999 (3D WebGL + AI Chatbot + WhatsApp API)\n\nAll packages include 100% code ownership.";
+      }
+      setMessages(prev => [
+        ...prev, 
+        { 
+          role: 'bot', 
+          content: fallbackReply,
+          suggested_actions: ["Explore Pricing", "Request Quote", "Chat on WhatsApp"]
+        }
+      ]);
     } finally {
       setLoading(false);
     }
@@ -110,48 +114,59 @@ export default function AiChatbotWidget() {
     <>
       {/* Floating Trigger */}
       <button 
-        className="floating-btn floating-chatbot" 
+        className="floating-btn floating-chatbot bg-gradient-to-br from-indigo-600 via-primary to-indigo-700 text-white shadow-xl shadow-indigo-600/40 hover:scale-110 active:scale-95 transition-all duration-200" 
         onClick={() => setIsOpen(!isOpen)}
         title="Chat with AMP Ventures AI Advisor"
         aria-label="Toggle AI Chat"
       >
-        {isOpen ? '✕' : '🤖'}
+        {isOpen ? (
+          <X className="w-6 h-6 text-white" />
+        ) : (
+          <div className="relative flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-white drop-shadow" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-lime-accent rounded-full border-2 border-indigo-700"></span>
+          </div>
+        )}
       </button>
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="chatbot-modal">
+        <div className="chatbot-modal bg-[#0e1118]/95 backdrop-blur-2xl border border-white/[0.1] shadow-2xl rounded-2xl">
           {/* Header */}
-          <div className="chat-header">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-              <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', color: '#fff' }}>
-                ⚡
+          <div className="chat-header p-4 border-b border-white/[0.08] flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+                <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#fff' }}>AMP AI Advisor</div>
-                <div style={{ fontSize: '0.72rem', color: '#10B981', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981', display: 'inline-block' }}></span>
-                  Online • Instant Replies
+                <div className="text-sm font-bold text-white">AMP AI Advisor</div>
+                <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block"></span>
+                  Online • Instant Consultation
                 </div>
               </div>
             </div>
             <button 
               onClick={() => setIsOpen(false)} 
-              style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.1rem' }}
+              className="p-1 rounded-lg text-slate-400 hover:text-white transition-colors"
             >
-              ✕
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Messages */}
-          <div className="chat-messages">
+          {/* Messages Container */}
+          <div className="chat-messages-container p-4 space-y-3 max-h-[350px] overflow-y-auto">
             {messages.map((m, idx) => (
-              <div key={idx} className={`chat-bubble ${m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot'}`}>
-                <div style={{ whiteSpace: 'pre-line' }}>{m.content}</div>
+              <div key={idx} className={`chat-bubble ${m.role === 'user' ? 'chat-bubble-user bg-indigo-600 text-white ml-auto' : 'chat-bubble-bot bg-[#151a26] text-slate-200 border border-white/[0.08]'}`}>
+                <div className="text-xs leading-relaxed whitespace-pre-line">{m.content}</div>
                 {m.suggested_actions && m.suggested_actions.length > 0 && (
-                  <div className="chat-actions">
+                  <div className="chat-actions mt-2.5 flex flex-wrap gap-1.5">
                     {m.suggested_actions.map((act, aIdx) => (
-                      <button key={aIdx} className="chat-action-pill" onClick={() => handleActionClick(act)}>
+                      <button 
+                        key={aIdx} 
+                        className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-slate-200 border border-white/[0.1] transition-all" 
+                        onClick={() => handleActionClick(act)}
+                      >
                         {act}
                       </button>
                     ))}
@@ -161,8 +176,8 @@ export default function AiChatbotWidget() {
             ))}
 
             {loading && (
-              <div className="chat-bubble chat-bubble-bot" style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>AI Advisor is typing...</span>
+              <div className="chat-bubble chat-bubble-bot bg-[#151a26] text-slate-400 text-xs flex items-center gap-2 border border-white/[0.08]">
+                <span>AI Advisor is typing...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -170,21 +185,12 @@ export default function AiChatbotWidget() {
 
           {/* Quick Prompts if conversation is fresh */}
           {messages.length <= 2 && (
-            <div style={{ padding: '0.5rem 1rem', display: 'flex', gap: '0.4rem', overflowX: 'auto', background: 'rgba(15, 23, 42, 0.6)' }}>
+            <div className="px-4 py-2 flex gap-1.5 overflow-x-auto bg-[#0a0d14]/70 border-t border-white/[0.05]">
               {SUGGESTED_QUESTIONS.map((q, idx) => (
                 <button 
                   key={idx} 
                   onClick={() => handleSend(q)}
-                  style={{
-                    fontSize: '0.72rem',
-                    padding: '0.25rem 0.6rem',
-                    borderRadius: '999px',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    color: 'var(--text-secondary)',
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap'
-                  }}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/[0.08] text-slate-400 hover:text-white whitespace-nowrap transition-all"
                 >
                   {q}
                 </button>
@@ -194,7 +200,7 @@ export default function AiChatbotWidget() {
 
           {/* Input Row */}
           <form 
-            className="chat-input-row"
+            className="chat-input-row p-3 border-t border-white/[0.08] flex items-center gap-2 bg-[#0e1118]"
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
           >
             <input 
@@ -202,23 +208,14 @@ export default function AiChatbotWidget() {
               placeholder="Ask about pricing, tiers, or advice..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              style={{
-                flexGrow: 1,
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '0.6rem 0.85rem',
-                color: '#fff',
-                fontSize: '0.88rem',
-                outline: 'none'
-              }}
+              className="flex-grow bg-white/[0.05] border border-white/[0.1] rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
             <button 
               type="submit" 
-              className="btn btn-primary btn-sm"
+              className="p-2 rounded-xl bg-lime-accent text-slate-950 hover:bg-lime-400 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!input.trim() || loading}
             >
-              Send
+              <Send className="w-3.5 h-3.5" />
             </button>
           </form>
         </div>

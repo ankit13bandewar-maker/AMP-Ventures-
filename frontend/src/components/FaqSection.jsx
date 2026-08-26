@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { HelpCircle, ChevronDown, ChevronUp, ArrowUpRight } from 'lucide-react';
 
 const FAQS_DATA = [
   {
@@ -29,84 +30,56 @@ const FAQS_DATA = [
 ];
 
 export default function FaqSection({ title = "Frequently Asked Questions", subtitle = "Clear, straightforward answers to help you make the best decision for your business." }) {
-  const [openFaq, setOpenFaq] = useState(0); // First item open by default for immediate preview
+  const [openFaq, setOpenFaq] = useState(0);
 
   const toggleFaq = (idx) => {
     setOpenFaq(openFaq === idx ? null : idx);
   };
 
   return (
-    <section className="section-padding" style={{ background: 'rgba(15, 23, 42, 0.4)', borderTop: '1px solid var(--border-subtle)' }}>
-      <div className="container" style={{ maxWidth: '850px' }}>
-        <div className="section-header">
-          <div className="section-tag">Got Questions?</div>
-          <h2 className="section-title">{title}</h2>
-          <p className="section-subtitle">{subtitle}</p>
+    <div className="faq-section">
+      <div className="text-center max-w-2xl mx-auto mb-12">
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-lime-accent bg-lime-accent/10 border border-lime-accent/20 mb-3">
+          <HelpCircle className="w-3.5 h-3.5" />
+          <span>Got Questions?</span>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-          {FAQS_DATA.map((faq, idx) => {
-            const isOpen = openFaq === idx;
-            return (
-              <div 
-                key={idx} 
-                className="glass-card" 
-                style={{ 
-                  padding: '1.25rem 1.5rem', 
-                  cursor: 'pointer',
-                  borderColor: isOpen ? 'rgba(99, 102, 241, 0.4)' : 'var(--border-subtle)',
-                  background: isOpen ? 'rgba(15, 23, 42, 0.9)' : 'rgba(15, 23, 42, 0.6)',
-                  transition: 'all 0.25s ease'
-                }}
-                onClick={() => toggleFaq(idx)}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-                  <span style={{ fontWeight: 600, fontSize: '1rem', color: isOpen ? '#fff' : 'var(--text-primary)' }}>
-                    {faq.q}
-                  </span>
-                  <div style={{ 
-                    width: '28px', 
-                    height: '28px', 
-                    minWidth: '28px',
-                    borderRadius: '50%',
-                    background: isOpen ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    color: isOpen ? 'var(--primary-light)' : 'var(--text-muted)',
-                    fontSize: '1.2rem',
-                    fontWeight: 700,
-                    transition: 'all 0.2s ease'
-                  }}>
-                    {isOpen ? '−' : '+'}
-                  </div>
-                </div>
-
-                {isOpen && (
-                  <div style={{ 
-                    marginTop: '0.85rem', 
-                    paddingTop: '0.85rem', 
-                    borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-                    color: 'var(--text-secondary)', 
-                    fontSize: '0.92rem', 
-                    lineHeight: '1.6' 
-                  }}>
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Quick Contact Link below FAQ */}
-        <div style={{ textAlign: 'center', marginTop: '2rem', fontSize: '0.92rem', color: 'var(--text-secondary)' }}>
-          Have a specific question about your store?{' '}
-          <Link to="/contact" style={{ color: 'var(--primary-light)', fontWeight: 600, textDecoration: 'underline' }}>
-            Ask our Lead Architect directly →
-          </Link>
-        </div>
+        <h2 className="text-3xl font-extrabold text-white mb-3">{title}</h2>
+        <p className="text-slate-400 text-sm">{subtitle}</p>
       </div>
-    </section>
+
+      <div className="space-y-3">
+        {FAQS_DATA.map((faq, idx) => {
+          const isOpen = openFaq === idx;
+          return (
+            <div 
+              key={idx} 
+              className={`p-5 rounded-2xl bg-[#111522] border transition-all cursor-pointer ${isOpen ? 'border-sky-400/40 bg-[#151a26]' : 'border-white/[0.08] hover:border-white/[0.18]'}`}
+              onClick={() => toggleFaq(idx)}
+            >
+              <div className="flex justify-between items-center gap-4">
+                <span className="font-bold text-sm text-white">{faq.q}</span>
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${isOpen ? 'bg-sky-400/20 text-sky-400' : 'bg-white/[0.05] text-slate-400'}`}>
+                  {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                </div>
+              </div>
+
+              {isOpen && (
+                <div className="mt-3.5 pt-3.5 border-t border-white/[0.06] text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  {faq.a}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="text-center mt-8 text-xs text-slate-400">
+        Have a specific question about your store?{' '}
+        <Link to="/contact" className="text-lime-accent font-semibold hover:underline inline-flex items-center gap-1">
+          <span>Ask our Lead Architect directly</span>
+          <ArrowUpRight className="w-3 h-3" />
+        </Link>
+      </div>
+    </div>
   );
 }

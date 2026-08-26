@@ -1,236 +1,232 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { 
+  Zap, Target, Lock, Cpu, Award, ShieldCheck, 
+  Check, ArrowUpRight, Sparkles, Clock, Globe, MessageSquare 
+} from 'lucide-react';
 
 const VALUES = [
   {
-    icon: '⚡',
-    title: 'Ultra Fast Speed',
-    points: [
-      'Instant page loading',
-      'Smooth mobile experience',
-      'Zero slow plugins'
-    ]
+    icon: Zap,
+    title: 'Ultra-Fast Performance',
+    desc: 'Sub-second page load times with zero bloated legacy plugins, ensuring immediate customer retention.',
+    color: 'text-amber-400',
+    bg: 'bg-amber-400/10',
+    border: 'border-amber-400/25'
   },
   {
-    icon: '🎯',
-    title: 'Built for Sales',
-    points: [
-      'Easy WhatsApp booking',
-      'Clear call-to-action buttons',
-      'Turns visitors into buyers'
-    ]
+    icon: Target,
+    title: 'Engineered for Conversion',
+    desc: 'Bespoke WhatsApp booking pipelines, direct phone triggers, and verified Google Maps review widgets.',
+    color: 'text-sky-400',
+    bg: 'bg-sky-400/10',
+    border: 'border-sky-400/25'
   },
   {
-    icon: '🔒',
-    title: '100% Ownership',
-    points: [
-      'You own your website code',
-      'Full control of your data',
-      'No lock-in or hidden fees'
-    ]
+    icon: Lock,
+    title: '100% Client Ownership',
+    desc: 'You hold full rights to your domain, database, and source code from day 1 with zero monthly software rent.',
+    color: 'text-lime-accent',
+    bg: 'bg-lime-accent/10',
+    border: 'border-lime-accent/25'
   },
   {
-    icon: '🤖',
-    title: 'Modern Technology',
-    points: [
-      'Easy photo & menu updates',
-      'Smart AI chatbot assistant',
-      'Future-proof clean build'
-    ]
+    icon: Cpu,
+    title: 'Modern Architecture',
+    desc: 'Built on FastAPI Python engines, React Vite clients, and AI automation for future-proof scalability.',
+    color: 'text-indigo-400',
+    bg: 'bg-indigo-400/10',
+    border: 'border-indigo-400/25'
   }
 ];
 
 const PROCESS_STEPS = [
   {
     step: '01',
-    title: 'Business Review',
-    points: [
-      'Understand your goals',
-      'Check local competition',
-      'Plan website structure'
-    ]
+    title: 'Discovery & Local Audit',
+    desc: 'We analyze your current footfall, competitors on Google Maps, and determine the optimal architecture for your tier.'
   },
   {
     step: '02',
-    title: 'Design & Layout',
-    points: [
-      'Clean modern design',
-      'Mobile-friendly layout',
-      'Match your brand style'
-    ]
+    title: 'Bespoke UI/UX Engineering',
+    desc: 'Crafting responsive mobile layouts, digital service menus, and custom interactive components matching your exact brand.'
   },
   {
     step: '03',
-    title: 'Build & Features',
-    points: [
-      'Fast website coding',
-      'WhatsApp direct booking',
-      'Instant lead forms'
-    ]
+    title: 'FastAPI & WhatsApp Integration',
+    desc: 'Developing high-speed backend routes, automated lead notification triggers, and client CMS panels.'
   },
   {
     step: '04',
-    title: 'Launch & Handover',
-    points: [
-      'Go live on fast server',
-      'Connect Google Maps ranking',
-      'Full training & ownership'
-    ]
+    title: 'Launch, SEO & Handover',
+    desc: 'Going live on enterprise CDN hosting, synchronizing Google Business Profiles, and conducting full staff handover.'
   }
 ];
 
 export default function About() {
   return (
-    <div className="about-page">
+    <div className="about-page pt-28 pb-20">
       {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}>
-        <div className="container text-center">
-          <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
-            <span>Our Mission & Vision</span>
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-lime-accent mb-6 shadow-inner">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Our Mission & Architectural Vision</span>
           </div>
-          <h1 className="section-title">
-            Empowering Brick-and-Mortar Businesses With <span className="text-gradient">World-Class Web Engineering</span>
+          
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Empowering Offline Businesses With <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-sky-400 to-indigo-400">
+              World-Class Web Engineering
+            </span>
           </h1>
-          <p className="section-subtitle" style={{ maxWidth: '780px', margin: '0 auto' }}>
-            AMP Ventures was founded to bridge the digital divide for local physical businesses—replacing clunky, non-converting templates with ultra-fast, high-converting digital storefronts.
+
+          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            AMP Ventures was founded to bridge the digital gap for physical businesses—replacing clunky, non-converting generic templates with ultra-fast, high-converting digital storefronts.
           </p>
         </div>
       </section>
 
-      {/* Founder Credentials & Story Card */}
-      <section className="section-padding" style={{ paddingTop: '1rem' }}>
-        <div className="container">
-          <div className="glass-card" style={{ padding: '3.5rem 2.5rem', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-              <div>
-                <div className="badge badge-indigo" style={{ marginBottom: '1rem' }}>Engineering Leadership</div>
-                <h2 style={{ fontSize: '2.2rem', marginBottom: '1.25rem', lineHeight: '1.2' }}>
-                  Behind AMP Ventures: <span className="text-gradient-cyan">Founder Credentials</span>
+      {/* Founder Credentials Card */}
+      <section className="py-10">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="p-8 lg:p-12 rounded-3xl bg-[#111522] border border-white/[0.1] shadow-2xl backdrop-blur-2xl">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              
+              <div className="lg:col-span-7 space-y-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-bold uppercase tracking-wider">
+                  <Award className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Engineering Leadership</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug">
+                  Built on Rigorous <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
+                    AI/ML & Networking Standards
+                  </span>
                 </h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.7', marginBottom: '1.25rem' }}>
-                  Most traditional web agencies deliver slow, cookie-cutter WordPress themes managed by non-technical middlemen. At AMP Ventures, every architecture is engineered from first principles with rigorous technical standards.
+
+                <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                  Most web agencies deliver slow, cookie-cutter WordPress themes managed by non-technical middlemen. At AMP Ventures, every architecture is engineered from first principles.
                 </p>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', lineHeight: '1.7', marginBottom: '1.75rem' }}>
-                  Combining advanced <strong>IIT Roorkee AI/ML engineering</strong> with <strong>Cisco Certified Network Associate (CCNA)</strong> infrastructure fundamentals, our platform bridges local offline retail and clinics into modern, automated revenue engines.
+
+                <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+                  Combining advanced <strong>IIT Roorkee AI/ML certification</strong> with <strong>Cisco Certified Network Associate (CCNA)</strong> enterprise infrastructure fundamentals, we engineer automated revenue engines for local salons, clinics, restaurants, and retail.
                 </p>
 
                 {/* Verified Credentials Pills */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255, 255, 255, 0.04)', padding: '0.75rem 1.2rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-                    <span style={{ fontSize: '1.4rem' }}>🎓</span>
+                <div className="space-y-3 pt-2">
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-lime-accent/15 border border-lime-accent/30 flex items-center justify-center flex-shrink-0">
+                      <Award className="w-5 h-5 text-lime-accent" />
+                    </div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#fff' }}>IIT Roorkee Certified</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Advanced Artificial Intelligence & Machine Learning</div>
+                      <div className="font-bold text-sm text-white">IIT Roorkee Certified</div>
+                      <div className="text-xs text-slate-400">Advanced Artificial Intelligence & Machine Learning</div>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255, 255, 255, 0.04)', padding: '0.75rem 1.2rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)' }}>
-                    <span style={{ fontSize: '1.4rem' }}>🌐</span>
+                  <div className="p-4 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-lg bg-sky-400/15 border border-sky-400/30 flex items-center justify-center flex-shrink-0">
+                      <ShieldCheck className="w-5 h-5 text-sky-400" />
+                    </div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#fff' }}>Cisco Certified Network Associate (CCNA)</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Enterprise Cloud Routing, Switching & Security Architecture</div>
+                      <div className="font-bold text-sm text-white">Cisco Certified Network Associate (CCNA)</div>
+                      <div className="text-xs text-slate-400">Enterprise Cloud Infrastructure, Routing & Cyber Security</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Visual Pillar Box */}
-              <div style={{ background: 'rgba(15, 23, 42, 0.85)', padding: '2.25rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-subtle)' }}>
-                <h3 style={{ fontSize: '1.3rem', marginBottom: '1.5rem', color: '#fff' }}>The AMP Ventures Guarantee:</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <div style={{ display: 'flex', gap: '0.85rem' }}>
-                    <span style={{ color: 'var(--success)', fontSize: '1.2rem', fontWeight: 800 }}>✓</span>
+              {/* Guarantees Box */}
+              <div className="lg:col-span-5 p-7 rounded-2xl bg-[#161c2c] border border-white/[0.1] shadow-xl space-y-6">
+                <h3 className="text-lg font-bold text-white border-b border-white/[0.08] pb-3">The AMP Ventures Guarantee</h3>
+                
+                <ul className="space-y-4 text-xs sm:text-sm text-slate-300">
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">✓</div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#fff' }}>95+ Google PageSpeed Guarantee</div>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>No heavy bloated plugins that slow down mobile customer booking.</p>
+                      <strong className="text-white block font-semibold mb-0.5">95+ Google PageSpeed Guarantee</strong>
+                      <span className="text-slate-400 text-xs">Zero bloated plugins slowing down mobile visitors.</span>
                     </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '0.85rem' }}>
-                    <span style={{ color: 'var(--success)', fontSize: '1.2rem', fontWeight: 800 }}>✓</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">✓</div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#fff' }}>Full Code & Data Ownership</div>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>You own your domain, SQLite/PostgreSQL lead database, and source code.</p>
+                      <strong className="text-white block font-semibold mb-0.5">100% Code & Data Ownership</strong>
+                      <span className="text-slate-400 text-xs">You hold complete control of your domain and SQLite/Postgres database.</span>
                     </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '0.85rem' }}>
-                    <span style={{ color: 'var(--success)', fontSize: '1.2rem', fontWeight: 800 }}>✓</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5 font-bold">✓</div>
                     <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#fff' }}>Direct WhatsApp & Call Support</div>
-                      <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Direct access to the lead engineer—no junior support tickets.</p>
+                      <strong className="text-white block font-semibold mb-0.5">Direct Lead Architect Contact</strong>
+                      <span className="text-slate-400 text-xs">Direct technical access—no junior ticket handlers.</span>
                     </div>
-                  </div>
-                </div>
+                  </li>
+                </ul>
 
-                <div style={{ marginTop: '2rem' }}>
-                  <Link to="/contact" className="btn btn-primary" style={{ width: '100%' }}>
-                    Schedule Founder Strategy Call →
-                  </Link>
-                </div>
+                <Link
+                  to="/contact"
+                  className="w-full py-3.5 rounded-xl bg-lime-accent hover:bg-lime-400 text-slate-950 font-bold text-center text-sm shadow-lg flex items-center justify-center gap-2 transition-all"
+                >
+                  <span>Schedule Strategy Call</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </Link>
               </div>
+
             </div>
           </div>
         </div>
       </section>
 
-      {/* Core Values */}
-      <section className="section-padding">
-        <div className="container">
-          <div className="section-header">
-            <div className="section-tag">Core Principles</div>
-            <h2 className="section-title">How We Engineer Web Growth</h2>
-            <p className="section-subtitle">The four pillars underlying every project delivered by AMP Ventures.</p>
+      {/* Core Principles Bento */}
+      <section className="py-16">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-extrabold text-white mb-3">Core Engineering Principles</h2>
+            <p className="text-slate-400 text-sm">The four pillars underlying every client deployment.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
-            {VALUES.map((val, idx) => (
-              <div key={idx} className="glass-card" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{val.icon}</div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.75rem', color: '#fff' }}>{val.title}</h3>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                  {val.points.map((pt, pIdx) => (
-                    <li key={pIdx} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
-                      <span style={{ color: 'var(--primary-light)', fontSize: '0.75rem', marginTop: '0.15rem' }}>•</span>
-                      <span>{pt}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {VALUES.map((val, idx) => {
+              const IconComponent = val.icon;
+              return (
+                <div key={idx} className="p-7 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-white/[0.18] transition-all">
+                  <div className={`w-12 h-12 rounded-xl ${val.bg} ${val.border} border flex items-center justify-center mb-5`}>
+                    <IconComponent className={`w-6 h-6 ${val.color}`} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{val.title}</h3>
+                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{val.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* 4-Step Execution Process */}
-      <section className="section-padding" style={{ background: 'rgba(15, 23, 42, 0.4)', borderTop: '1px solid var(--border-subtle)' }}>
-        <div className="container">
-          <div className="section-header">
-            <div className="section-tag">Smooth Execution</div>
-            <h2 className="section-title">Our 4-Step Build Workflow</h2>
-            <p className="section-subtitle">From initial brief to live Google ranking in under 14 days.</p>
+      <section className="py-16 bg-[#0a0d14] border-t border-white/[0.08]">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-3xl font-extrabold text-white mb-3">Our 4-Step Execution Workflow</h2>
+            <p className="text-slate-400 text-sm">From initial consultation to live Google ranking in under 14 days.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
-            {PROCESS_STEPS.map((step, idx) => (
-              <div key={idx} className="glass-card" style={{ padding: '1.75rem', position: 'relative', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'rgba(99, 102, 241, 0.4)', fontFamily: 'var(--font-mono)', lineHeight: 1, marginBottom: '0.75rem' }}>
-                  {step.step}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {PROCESS_STEPS.map((s, idx) => (
+              <div key={idx} className="p-6 rounded-2xl bg-[#111522] border border-white/[0.08] flex flex-col justify-between">
+                <div>
+                  <div className="text-2xl font-black font-mono text-lime-accent/80 mb-3">{s.step}</div>
+                  <h3 className="text-sm font-bold text-white mb-2">{s.title}</h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">{s.desc}</p>
                 </div>
-                <h3 style={{ fontSize: '1.15rem', marginBottom: '0.85rem', color: '#fff' }}>{step.title}</h3>
-                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                  {step.points.map((pt, pIdx) => (
-                    <li key={pIdx} style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: '0.45rem', lineHeight: '1.4' }}>
-                      <span style={{ color: 'var(--primary-light)', fontSize: '0.75rem', marginTop: '0.15rem' }}>•</span>
-                      <span>{pt}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
             ))}
           </div>
         </div>
       </section>
+
     </div>
   );
 }

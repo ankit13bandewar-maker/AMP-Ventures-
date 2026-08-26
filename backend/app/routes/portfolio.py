@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from typing import List, Optional
+from app.services.cache import cached
 
 router = APIRouter()
 
@@ -99,10 +100,10 @@ PORTFOLIO_CASE_STUDIES = [
 ]
 
 @router.get("/portfolio")
+@cached(ttl_seconds=600, key_prefix="portfolio")
 async def get_portfolio(category: Optional[str] = None):
     """Retrieve agency portfolio case studies with optional industry filter."""
     if category and category.lower() != "all":
         filtered = [item for item in PORTFOLIO_CASE_STUDIES if item["category"].lower() == category.lower()]
         return {"count": len(filtered), "case_studies": filtered}
     return {"count": len(PORTFOLIO_CASE_STUDIES), "case_studies": PORTFOLIO_CASE_STUDIES}
-

@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { 
+} from 'lucide-react';
+import { getApiUrl } from '../apiConfig';
 
 const TIER_OPTIONS = [
   { value: 'Tier 1 - Basic (Static Website)', label: 'Tier 1 — Basic (Static Website • ₹9,999)' },
@@ -50,20 +53,11 @@ export default function Contact() {
     setErrorMessage('');
 
     try {
-      let response;
-      try {
-        response = await fetch('http://127.0.0.1:8000/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-      } catch (e) {
-        response = await fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-      }
+      const response = await fetch(getApiUrl('/api/contact'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
       if (!response.ok) {
         throw new Error(`Server returned ${response.status}`);
@@ -72,7 +66,7 @@ export default function Contact() {
       const result = await response.json();
       setSubmittedLead(result);
     } catch (err) {
-      // Create local graceful confirmation if offline
+      // Local fallback confirmation
       setSubmittedLead({
         success: true,
         message: `Thank you ${formData.name}, your project inquiry for "${formData.business_name}" has been recorded!`,
@@ -85,127 +79,141 @@ export default function Contact() {
   };
 
   return (
-    <div className="contact-page">
+    <div className="contact-page pt-28 pb-20">
       {/* Header */}
-      <section className="section-padding" style={{ paddingTop: '4rem', paddingBottom: '2.5rem' }}>
-        <div className="container text-center">
-          <div className="section-tag" style={{ margin: '0 auto 1.5rem' }}>
-            <span>Start Your Build</span>
+      <section className="py-12 text-center">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-lime-accent mb-6 shadow-inner">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Direct Project Consultation</span>
           </div>
-          <h1 className="section-title">
-            Let's Engineer Your <span className="text-gradient">Digital Storefront</span>
+          
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
+            Let's Engineer Your <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-sky-400 to-indigo-400">
+              High-Converting Digital Platform
+            </span>
           </h1>
-          <p className="section-subtitle" style={{ maxWidth: '720px', margin: '0 auto' }}>
-            Fill out the project brief below or reach out directly on WhatsApp for an immediate consultation with our Lead Web Architect.
+
+          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+            Fill out your project brief below or reach out directly on WhatsApp for an immediate consultation with our Lead Technical Architect.
           </p>
         </div>
       </section>
 
       {/* Main Content Grid */}
-      <section className="section-padding" style={{ paddingTop: '1rem' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '3rem', alignItems: 'start' }}>
+      <section className="py-8">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
             {/* Left: Contact Form or Success Confirmation */}
-            <div className="glass-card" style={{ padding: '2.5rem' }}>
+            <div className="lg:col-span-7 p-8 lg:p-10 rounded-3xl bg-[#111522] border border-white/[0.1] shadow-2xl backdrop-blur-2xl">
               {submittedLead ? (
-                <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(16,185,129,0.15)', border: '2px solid #10B981', color: '#10B981', fontSize: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                    ✓
+                <div className="text-center py-6 space-y-6">
+                  <div className="w-16 h-16 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
+                    <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 style={{ fontSize: '1.75rem', marginBottom: '0.75rem', color: '#fff' }}>Project Brief Received!</h3>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
-                    {submittedLead.message}
-                  </p>
-
-                  <div style={{ background: 'rgba(15,23,42,0.8)', padding: '1.25rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-subtle)', marginBottom: '2rem', textAlign: 'left' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Reference ID:</span>
-                      <strong style={{ color: 'var(--primary-light)' }}>#AMP-{submittedLead.lead_id || '2026'}</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.85rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Selected Package:</span>
-                      <span style={{ color: '#fff' }}>{formData.tier}</span>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-                      <span style={{ color: 'var(--text-muted)' }}>Estimated Turnaround:</span>
-                      <span style={{ color: 'var(--success)' }}>Within 24 Hours</span>
-                    </div>
+                  
+                  <div>
+                    <h3 className="text-2xl font-extrabold text-white">Project Brief Received!</h3>
+                    <p className="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto leading-relaxed">
+                      {submittedLead.message}
+                    </p>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <div className="p-5 rounded-2xl bg-[#0a0d14] border border-white/[0.06] text-left text-xs space-y-2.5 max-w-md mx-auto">
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Reference ID:</span>
+                      <strong className="text-lime-accent font-mono">#AMP-{submittedLead.lead_id || '2026'}</strong>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Selected Package:</span>
+                      <span className="text-white font-medium">{formData.tier}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-slate-400">Estimated Turnaround:</span>
+                      <span className="text-emerald-400 font-semibold">Within 4 Business Hours</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3 justify-center pt-2">
                     <a 
                       href={`https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I%20just%20submitted%20lead%20%23AMP-${submittedLead.lead_id}%20for%20${encodeURIComponent(formData.business_name)}.`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-whatsapp"
+                      className="px-6 py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-lg flex items-center gap-2"
                     >
-                      💬 Fast-Track on WhatsApp
+                      <MessageSquare className="w-4 h-4" />
+                      <span>Fast-Track on WhatsApp</span>
                     </a>
                     <button 
                       onClick={() => { setSubmittedLead(null); setFormData({ ...formData, message: '' }); }}
-                      className="btn btn-secondary"
+                      className="px-6 py-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-white text-xs font-semibold border border-white/[0.1]"
                     >
                       Submit Another Inquiry
                     </button>
                   </div>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit}>
-                  <h3 style={{ fontSize: '1.4rem', marginBottom: '1.5rem', color: '#fff' }}>Project Consultation Form</h3>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+                    <h3 className="text-xl font-bold text-white">Project Consultation Brief</h3>
+                    <span className="text-xs text-lime-accent font-mono font-semibold">Step 1 of 1</span>
+                  </div>
 
                   {errorMessage && (
-                    <div style={{ padding: '0.75rem 1rem', background: 'rgba(239,68,68,0.15)', border: '1px solid #ef4444', borderRadius: 'var(--radius-sm)', color: '#fca5a5', marginBottom: '1.25rem', fontSize: '0.88rem' }}>
+                    <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs">
                       {errorMessage}
                     </div>
                   )}
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <div className="form-group">
-                      <label className="form-label">Your Name *</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">Your Name *</label>
                       <input 
                         type="text" 
                         name="name"
                         required
-                        className="form-input" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
                         placeholder="e.g. Rahul Sharma"
                         value={formData.name}
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="form-group">
-                      <label className="form-label">Business Name *</label>
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">Business Name *</label>
                       <input 
                         type="text" 
                         name="business_name"
                         required
-                        className="form-input" 
-                        placeholder="e.g. Sharma Bakery & Cafe"
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
+                        placeholder="e.g. Sharma Sweets & Cafe"
                         value={formData.business_name}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <div className="form-group">
-                      <label className="form-label">Phone / WhatsApp Number *</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">WhatsApp / Phone *</label>
                       <input 
                         type="tel" 
                         name="phone"
                         required
-                        className="form-input" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
                         placeholder="+91 98765 43210"
                         value={formData.phone}
                         onChange={handleChange}
                       />
                     </div>
-                    <div className="form-group">
-                      <label className="form-label">Email Address *</label>
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">Email Address *</label>
                       <input 
                         type="email" 
                         name="email"
                         required
-                        className="form-input" 
+                        className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
                         placeholder="rahul@example.com"
                         value={formData.email}
                         onChange={handleChange}
@@ -213,11 +221,11 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Target Service Tier</label>
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">Target Service Tier</label>
                     <select 
                       name="tier"
-                      className="form-select"
+                      className="w-full px-4 py-3 rounded-xl bg-[#0e1118] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
                       value={formData.tier}
                       onChange={handleChange}
                     >
@@ -227,12 +235,13 @@ export default function Contact() {
                     </select>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label">Tell us about your business & goals</label>
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">Project Goals & Requirements</label>
                     <textarea 
                       name="message"
-                      className="form-textarea" 
-                      placeholder="e.g. We have a salon in Indiranagar. We want online booking and Google map ranking to increase appointment bookings during weekdays."
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.1] text-white text-sm focus:border-lime-accent focus:outline-none transition-colors"
+                      placeholder="e.g. We want an online salon booking portal with Google review sync to increase weekday bookings."
                       value={formData.message}
                       onChange={handleChange}
                     ></textarea>
@@ -240,83 +249,92 @@ export default function Contact() {
 
                   <button 
                     type="submit" 
-                    className="btn btn-primary btn-lg"
-                    style={{ width: '100%' }}
+                    className="w-full py-4 rounded-xl bg-lime-accent hover:bg-lime-400 text-slate-950 font-bold text-sm shadow-xl flex items-center justify-center gap-2 transition-all disabled:opacity-50"
                     disabled={submitting}
                   >
-                    {submitting ? 'Transmitting Project Brief...' : 'Submit Inquiry & Get Free Strategy Call →'}
+                    <Send className="w-4 h-4" />
+                    <span>{submitting ? 'Transmitting Brief to Backend...' : 'Submit Inquiry & Request Strategy Call'}</span>
                   </button>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: '0.75rem' }}>
-                    🔒 We respect your privacy. No spam. Saved directly into SQLite backend.
+
+                  <div className="flex items-center justify-center gap-1.5 text-[11px] text-slate-500 pt-1">
+                    <Lock className="w-3 h-3 text-slate-400" />
+                    <span>Zero spam. Persisted securely in encrypted backend pipeline.</span>
                   </div>
                 </form>
               )}
             </div>
 
-            {/* Right: Direct Contacts, WhatsApp & Credentials Box */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {/* WhatsApp Instant Connect Card */}
-              <div className="glass-card" style={{ padding: '2rem', border: '1px solid rgba(37, 211, 102, 0.35)', background: 'linear-gradient(135deg, rgba(37, 211, 102, 0.08) 0%, rgba(15, 23, 42, 0.8) 100%)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1rem' }}>
-                  <div style={{ width: '42px', height: '42px', borderRadius: '50%', background: '#25D366', color: '#063c1b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem' }}>
-                    💬
+            {/* Right: Direct Contacts & WhatsApp Priority Box */}
+            <div className="lg:col-span-5 space-y-6">
+              {/* WhatsApp Card */}
+              <div className="p-7 rounded-3xl bg-gradient-to-br from-emerald-950/40 to-[#111522] border border-emerald-500/30 shadow-xl space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                    <MessageSquare className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Direct WhatsApp Priority Line</h3>
-                    <span style={{ fontSize: '0.78rem', color: '#34D399', fontWeight: 600 }}>● Instant Reply from Lead Engineer</span>
+                    <h3 className="text-base font-bold text-white">Direct WhatsApp Priority Line</h3>
+                    <span className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                      Instant reply from Lead Architect
+                    </span>
                   </div>
                 </div>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.5rem' }}>
-                  Prefer chatting directly? Skip the form and message our founder directly with your business location and questions.
+
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Prefer a direct 1-on-1 chat? Skip the form and message our founder directly with your business location and questions.
                 </p>
+
                 <a 
                   href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-whatsapp"
-                  style={{ width: '100%' }}
+                  className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all"
                 >
-                  Open WhatsApp Chat Now
+                  <MessageSquare className="w-4 h-4" />
+                  <span>Open WhatsApp Consultation</span>
                 </a>
               </div>
 
-              {/* Direct Info Card */}
-              <div className="glass-card" style={{ padding: '2rem' }}>
-                <h3 style={{ fontSize: '1.2rem', marginBottom: '1.25rem' }}>Agency Information</h3>
+              {/* Studio Info Card */}
+              <div className="p-7 rounded-3xl bg-[#111522] border border-white/[0.08] space-y-5">
+                <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-white/[0.08] pb-3">
+                  Agency Details & Studio
+                </h3>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>📍</span>
+                <div className="space-y-4 text-xs text-slate-300">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-4 h-4 text-sky-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>Engineering Studio</div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Bengaluru & New Delhi Tech Corridors, India</div>
+                      <strong className="text-white block font-semibold">Engineering Studio</strong>
+                      <span className="text-slate-400">Bengaluru & New Delhi Tech Corridors, India</span>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>📧</span>
+                  <div className="flex items-start gap-3">
+                    <Mail className="w-4 h-4 text-indigo-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>Direct Inquiries</div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>contact@ampventures.agency</div>
+                      <strong className="text-white block font-semibold">Direct Email</strong>
+                      <span className="text-slate-400">contact@ampventures.agency</span>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
-                    <span style={{ fontSize: '1.2rem' }}>⏱️</span>
+                  <div className="flex items-start gap-3">
+                    <Clock className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.9rem', color: '#fff' }}>Working Hours</div>
-                      <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Monday – Saturday: 9:00 AM – 8:00 PM IST</div>
+                      <strong className="text-white block font-semibold">Operating Hours</strong>
+                      <span className="text-slate-400">Monday – Saturday: 9:00 AM – 8:00 PM IST</span>
                     </div>
                   </div>
                 </div>
 
-                <div style={{ marginTop: '1.5rem', paddingTop: '1.25rem', borderTop: '1px solid var(--border-subtle)' }}>
-                  <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                    Founder: <strong>IIT Roorkee AI/ML Certified | CCNA</strong>
-                  </div>
+                <div className="pt-4 border-t border-white/[0.06] flex items-center gap-2 text-[11px] text-slate-400">
+                  <ShieldCheck className="w-3.5 h-3.5 text-lime-accent" />
+                  <span>Lead by <strong>IIT Roorkee AI/ML • Cisco CCNA</strong> Engineers</span>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>

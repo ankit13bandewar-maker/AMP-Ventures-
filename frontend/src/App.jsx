@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 
 // Layout Components
 import Navbar from './components/Navbar.jsx';
@@ -32,45 +33,47 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="site-wrapper">
-        {/* Ambient Glowing Background Layer */}
-        <div className="ambient-bg">
-          <div className="ambient-glow-1" />
-          <div className="ambient-glow-2" />
-          <div className="ambient-glow-3" />
-          <div className="cyber-grid" />
+    <ThemeProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <div className="site-wrapper">
+          {/* Ambient Glowing Background Layer */}
+          <div className="ambient-bg">
+            <div className="ambient-glow-1" />
+            <div className="ambient-glow-2" />
+            <div className="ambient-glow-3" />
+            <div className="cyber-grid" />
+          </div>
+
+          {/* Global Navigation Header */}
+          <Navbar />
+
+          {/* Dynamic Route Pages */}
+          <main style={{ position: 'relative', zIndex: 1 }}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/readiness-score" element={<ReadinessTool />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/admin" element={<AdminLeads />} />
+              {/* Catch-all fallback */}
+              <Route path="*" element={<Home />} />
+            </Routes>
+          </main>
+
+          {/* Global Floating Action Hub */}
+          <div className="floating-actions-container">
+            <WhatsAppFloating />
+            <AiChatbotWidget />
+          </div>
+
+          {/* Global Footer */}
+          <Footer />
         </div>
-
-        {/* Global Navigation Header */}
-        <Navbar />
-
-        {/* Dynamic Route Pages */}
-        <main style={{ position: 'relative', zIndex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/readiness-score" element={<ReadinessTool />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/admin" element={<AdminLeads />} />
-            {/* Catch-all fallback */}
-            <Route path="*" element={<Home />} />
-          </Routes>
-        </main>
-
-        {/* Global Floating Action Hub */}
-        <div className="floating-actions-container">
-          <WhatsAppFloating />
-          <AiChatbotWidget />
-        </div>
-
-        {/* Global Footer */}
-        <Footer />
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }

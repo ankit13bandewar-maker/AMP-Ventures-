@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../apiConfig';
 
 export default function Hero({ healthData, statsData, backendOnline, onPing }) {
   const [activeTab, setActiveTab] = useState('health');
@@ -108,7 +109,7 @@ export default function Hero({ healthData, statsData, backendOnline, onPing }) {
                 <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b' }} />
                 <span style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981' }} />
                 <span style={{ fontSize: '0.8rem', fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', marginLeft: '8px' }}>
-                  http://127.0.0.1:8000
+                  {API_BASE_URL || 'http://127.0.0.1:8000'}
                 </span>
               </div>
               <span className="badge badge-success" style={{ fontSize: '0.75rem' }}>

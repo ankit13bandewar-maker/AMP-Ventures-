@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Sparkles, Award, ArrowUp, MessageSquare, Phone, Mail } from 'lucide-react';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -7,7 +8,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="site-footer bloomx-footer">
+    <footer className="site-footer bloomx-footer border-t border-white/[0.08] bg-[#07090e]">
       {/* Top Geometric Prism Diamond Banner */}
       <div className="footer-geometric-banner">
         <div className="prism-diamond-pattern"></div>
@@ -19,22 +20,24 @@ export default function Footer() {
           {/* Column 1: Brand & Certification */}
           <div className="footer-brand-col">
             <Link to="/" className="brand-logo" style={{ marginBottom: '1rem', textDecoration: 'none' }}>
-              <div className="brand-icon">⚡</div>
+              <div className="w-8 h-8 rounded-lg bg-lime-accent/10 border border-lime-accent/30 flex items-center justify-center text-lime-accent">
+                <Sparkles className="w-4 h-4" />
+              </div>
               <div>
-                <div className="brand-text" style={{ fontSize: '1.4rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-                  AMP <span className="text-gradient-cyan">VENTURES</span>
+                <div className="brand-text" style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
+                  AMP <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">VENTURES</span>
                 </div>
-                <span className="brand-tag" style={{ color: 'var(--primary-light)', fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  Web Development Agency
+                <span className="brand-tag" style={{ color: 'var(--primary-light)', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                  Web Engineering Agency
                 </span>
               </div>
             </Link>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.25rem', maxWidth: '300px' }}>
-              Specialized web engineering, WhatsApp automation & local SEO for offline businesses.
+              Specialized web engineering, WhatsApp automation & local SEO for brick-and-mortar businesses.
             </p>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.5rem 0.85rem', borderRadius: '8px' }}>
-              <span style={{ fontSize: '1.1rem' }}>🎓</span>
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--primary-light)' }}>IIT Roorkee AI/ML • CCNA</span>
+              <Award className="w-4 h-4 text-lime-accent" />
+              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--primary-light)' }}>Enterprise Web Architecture & Security</span>
             </div>
           </div>
 
@@ -43,49 +46,50 @@ export default function Footer() {
             <h4 className="footer-title">Explore</h4>
             <ul className="footer-list">
               <li><Link to="/" className="footer-link">Home</Link></li>
-              <li><Link to="/about" className="footer-link">About</Link></li>
-              <li><Link to="/services" className="footer-link">Services</Link></li>
-              <li><Link to="/pricing" className="footer-link">Pricing</Link></li>
-              <li><Link to="/blog" className="footer-link">Blogs</Link></li>
+              <li><Link to="/about" className="footer-link">About Agency</Link></li>
+              <li><Link to="/services" className="footer-link">Service Tiers</Link></li>
+              <li><Link to="/pricing" className="footer-link">Pricing & Plans</Link></li>
+              <li><Link to="/blog" className="footer-link">Insights & Blog</Link></li>
             </ul>
           </div>
 
-          {/* Column 3: Our Work / Solutions */}
+          {/* Column 3: Our Solutions */}
           <div className="footer-nav-col">
-            <h4 className="footer-title">Our Work</h4>
+            <h4 className="footer-title">Solutions</h4>
             <ul className="footer-list">
-              <li><Link to="/services#tier-1" className="footer-link">Website & Development</Link></li>
-              <li><Link to="/services#tier-2" className="footer-link">WhatsApp Automation</Link></li>
-              <li><Link to="/services#tier-3" className="footer-link">3D & AI Interactive</Link></li>
-              <li><Link to="/services" className="footer-link">Local SEO & Google Maps</Link></li>
-              <li><Link to="/readiness-score" className="footer-link">Free Audit Tool</Link></li>
+              <li><Link to="/services#tier-1" className="footer-link">High-Converting Website</Link></li>
+              <li><Link to="/services#tier-2" className="footer-link">WhatsApp Booking Automation</Link></li>
+              <li><Link to="/services#tier-3" className="footer-link">3D & AI Interactive Engine</Link></li>
+              <li><Link to="/services" className="footer-link">Google Maps Local SEO</Link></li>
+              <li><Link to="/readiness-score" className="footer-link text-sky-400">Free Digital Audit Tool</Link></li>
             </ul>
           </div>
 
           {/* Column 4: Let's Connect */}
           <div className="footer-nav-col">
-            <h4 className="footer-title">Let's Connect</h4>
+            <h4 className="footer-title">Direct Contact</h4>
             <ul className="footer-list footer-contact-list">
               <li>
-                <a href="tel:+919876543210" className="footer-contact-link">+91 9876543210</a>
+                <a href="tel:+919876543210" className="footer-contact-link flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-slate-400" />
+                  <span>+91 9876543210</span>
+                </a>
               </li>
               <li>
-                <a href="tel:+919876543211" className="footer-contact-link">+91 9876543211</a>
+                <a href="mailto:contact@ampventures.agency" className="footer-contact-link flex items-center gap-2">
+                  <Mail className="w-3.5 h-3.5 text-slate-400" />
+                  <span>contact@ampventures.agency</span>
+                </a>
               </li>
-              <li>
-                <a href="mailto:contact@ampventures.agency" className="footer-contact-link">contact@ampventures.agency</a>
-              </li>
-              <li>
-                <a href="mailto:bd@ampventures.agency" className="footer-contact-link">bd@ampventures.agency</a>
-              </li>
-              <li style={{ marginTop: '0.4rem' }}>
+              <li style={{ marginTop: '0.6rem' }}>
                 <a 
                   href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business." 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="footer-whatsapp-pill"
+                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 text-xs font-bold hover:bg-emerald-500/25 transition-all"
                 >
-                  💬 WhatsApp Direct Chat
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>WhatsApp Direct Chat</span>
                 </a>
               </li>
             </ul>
@@ -108,9 +112,6 @@ export default function Footer() {
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-square-btn" aria-label="LinkedIn">
               <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-square-btn" aria-label="YouTube">
-              <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
           </div>
 
           {/* Policy Links & Copyright */}
@@ -120,23 +121,23 @@ export default function Footer() {
               <span className="legal-separator">•</span>
               <Link to="/about" className="legal-link">Privacy Policy</Link>
               <span className="legal-separator">•</span>
-              <Link to="/pricing" className="legal-link">Refund & Cancellation Policy</Link>
+              <Link to="/pricing" className="legal-link">Refund Policy</Link>
             </div>
             <div className="copyright-text">
-              All rights reserved by © {new Date().getFullYear()} AMP Ventures Agency
+              © {new Date().getFullYear()} AMP Ventures Web Engineering Agency. All rights reserved.
             </div>
           </div>
 
           {/* Crafted & Scroll-To-Top */}
           <div className="footer-crafted-col">
-            <span className="crafted-text">Crafted by <strong>AMP Ventures</strong></span>
+            <span className="crafted-text text-xs text-slate-400">Engineering for <strong>Offline Growth</strong></span>
             <button 
               onClick={scrollToTop} 
-              className="scroll-top-btn" 
+              className="scroll-top-btn flex items-center justify-center text-white bg-[#151a26] border border-sky-400 hover:bg-sky-400 hover:text-slate-950 transition-all shadow-md" 
               aria-label="Scroll to top"
               title="Back to Top"
             >
-              ↑
+              <ArrowUp className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -144,4 +145,3 @@ export default function Footer() {
     </footer>
   );
 }
-
