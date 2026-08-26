@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { 
+  Sparkles, CheckCircle2, MessageSquare, MapPin, 
+  Mail, Clock, ArrowUpRight, Lock, ShieldCheck, Send 
 } from 'lucide-react';
 import { getApiUrl } from '../apiConfig';
 
