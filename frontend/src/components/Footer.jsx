@@ -32,7 +32,7 @@ export default function Footer() {
               <span className="cert-icon-wrap">
                 <Award className="w-3.5 h-3.5 text-lime-accent" />
               </span>
-              <span>100% Code Ownership • Zero Rent</span>
+              <span>Rapid 5-Day Delivery • Zero Monthly Rent</span>
             </div>
           </div>
 

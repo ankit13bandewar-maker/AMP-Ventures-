@@ -13,7 +13,7 @@ const TRUST_BADGES = [
   { icon: Award, title: 'High-Performance Code', desc: 'Sub-Second Core Web Vitals' },
   { icon: ShieldCheck, title: 'Enterprise Cloud Infra', desc: 'Fast Global CDN & SSL Secured' },
   { icon: Clock, title: '5–7 Days Delivery', desc: 'Rapid Production Turnaround' },
-  { icon: TrendingUp, title: '100% Ownership', desc: 'Zero Monthly Software Retainers' },
+  { icon: TrendingUp, title: 'Zero Platform Lock-In', desc: 'No Recurring Software Fees' },
 ];
 
 const TRANSFORMATION_ITEMS = [
@@ -232,28 +232,28 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Feature 03: 100% Asset Ownership */}
+            {/* Feature 03: Zero Subscription Lock-In */}
             <div className="p-5 sm:p-6 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-indigo-400/40 transition-all flex flex-col justify-between">
               <div className="mb-4">
                 <div className="mb-2.5">
                   <span className="badge badge-primary badge-sm font-bold text-xs">Feature 03</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">100% Asset Ownership</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">Zero Monthly Lock-In</h3>
                 <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                  Complete code and domain ownership with zero monthly software fees.
+                  No monthly platform subscriptions or recurring agency software fees.
                 </p>
               </div>
 
-              {/* Ownership Proof Element */}
+              {/* Autonomy Proof Element */}
               <div className="p-3.5 sm:p-4 rounded-xl bg-[#0a0d14] border border-white/[0.06] flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="w-5 h-5 text-indigo-400 flex-shrink-0" />
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-white leading-tight">Full Asset Transfer</div>
-                    <div className="text-[11px] sm:text-xs text-indigo-300 font-semibold mt-0.5">Zero monthly platform rent</div>
+                    <div className="text-xs sm:text-sm font-bold text-white leading-tight">Direct Cloud Hosting</div>
+                    <div className="text-[11px] sm:text-xs text-indigo-300 font-semibold mt-0.5">Pay only for basic domain & server</div>
                   </div>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-bold">100% Yours</span>
+                <span className="text-xs font-mono px-2.5 py-1 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-bold">Zero Lock-In</span>
               </div>
             </div>
 
