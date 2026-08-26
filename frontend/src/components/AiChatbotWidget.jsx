@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bot, X, Send, Sparkles, Mic, MicOff, RotateCcw, MessageSquare, ArrowUpRight, Volume2 } from 'lucide-react';
-import { getApiUrl } from '../apiConfig';
+import { X, Send, Mic, MicOff, RotateCcw, MessageSquare, ArrowUpRight, Volume2, Sparkles } from 'lucide-react';
+import { getApiUrl, getWhatsAppUrl } from '../apiConfig';
 
 const INITIAL_MESSAGES = [
   {
@@ -25,52 +25,105 @@ export default function AiChatbotWidget() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [voiceLang, setVoiceLang] = useState('hi-IN'); // 'hi-IN' (Hindi/Hinglish) or 'en-IN' (English)
   const [speechSupported, setSpeechSupported] = useState(true);
   const [voiceToast, setVoiceToast] = useState('');
   
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const recognitionRef = useRef(null);
+  const silenceTimerRef = useRef(null);
+  const transcriptRef = useRef('');
   const navigate = useNavigate();
 
   // Initialize Speech Recognition
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
+    if (!SpeechRecognition) {
+      setSpeechSupported(false);
+      return;
+    }
+
+    try {
       const recognition = new SpeechRecognition();
-      recognition.continuous = false;
+      recognition.continuous = true;
       recognition.interimResults = true;
-      recognition.lang = 'en-US';
+      recognition.lang = voiceLang;
+      recognition.maxAlternatives = 1;
 
       recognition.onstart = () => {
         setIsListening(true);
-        setVoiceToast('Listening... Speak now 🎙️');
+        transcriptRef.current = '';
+        const langLabel = voiceLang === 'hi-IN' ? 'हिंदी / Hinglish' : 'English';
+        setVoiceToast(`सुन रहे हैं... बोलिए 🎙️ (${langLabel})`);
       };
 
       recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map(result => result[0].transcript)
-          .join('');
-        setInput(transcript);
+        let fullTranscript = '';
+        for (let i = 0; i < event.results.length; ++i) {
+          fullTranscript += event.results[i][0].transcript;
+        }
+
+        fullTranscript = fullTranscript.trim();
+        if (fullTranscript) {
+          transcriptRef.current = fullTranscript;
+          setInput(fullTranscript);
+
+          // Auto-send when user stops speaking for 1.3 seconds
+          if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+          silenceTimerRef.current = setTimeout(() => {
+            const speechText = transcriptRef.current?.trim();
+            if (speechText) {
+              try {
+                recognition.stop();
+              } catch (e) {
+                // Ignore stop errors
+              }
+              setIsListening(false);
+              setVoiceToast(voiceLang === 'hi-IN' ? 'प्रश्न भेज रहे हैं... ⚡' : 'Sending your query... ⚡');
+              setTimeout(() => setVoiceToast(''), 1500);
+              handleSend(speechText);
+              transcriptRef.current = '';
+            }
+          }, 1300);
+        }
       };
 
       recognition.onerror = (event) => {
-        console.warn('Speech recognition error:', event.error);
+        if (event.error === 'no-speech') return;
+        console.warn('Speech recognition warning:', event.error);
         setIsListening(false);
-        setVoiceToast('Could not capture audio. Please type.');
+        if (event.error === 'not-allowed') {
+          setVoiceToast('Microphone access blocked. Please enable mic in browser.');
+        } else {
+          setVoiceToast('Voice recognition paused. Click mic to retry.');
+        }
         setTimeout(() => setVoiceToast(''), 3000);
       };
 
       recognition.onend = () => {
         setIsListening(false);
-        setTimeout(() => setVoiceToast(''), 2000);
+        if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+        const speechText = transcriptRef.current?.trim();
+        if (speechText) {
+          transcriptRef.current = '';
+          handleSend(speechText);
+        }
       };
 
       recognitionRef.current = recognition;
-    } else {
+    } catch (err) {
+      console.warn("Speech recognition initialization error:", err);
       setSpeechSupported(false);
     }
-  }, []);
+
+    return () => {
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch (e) {}
+      }
+    };
+  }, [voiceLang]);
 
   const toggleSpeechRecognition = () => {
     if (!speechSupported || !recognitionRef.current) {
@@ -80,13 +133,23 @@ export default function AiChatbotWidget() {
     }
 
     if (isListening) {
-      recognitionRef.current.stop();
+      if (silenceTimerRef.current) clearTimeout(silenceTimerRef.current);
+      try {
+        recognitionRef.current.stop();
+      } catch (err) {}
       setIsListening(false);
+      const text = transcriptRef.current?.trim() || input.trim();
+      if (text) {
+        transcriptRef.current = '';
+        handleSend(text);
+      }
     } else {
       try {
+        transcriptRef.current = '';
+        recognitionRef.current.lang = voiceLang;
         recognitionRef.current.start();
       } catch (err) {
-        console.warn("Speech recognition restart:", err);
+        console.warn("Speech start:", err);
       }
     }
   };
@@ -178,7 +241,7 @@ export default function AiChatbotWidget() {
       navigate('/contact');
       setIsOpen(false);
     } else if (action.includes("WhatsApp")) {
-      window.open("https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business.", "_blank");
+      window.open(getWhatsAppUrl("Hi AMP Ventures, I'd like to consult about a website for my business."), "_blank");
     } else {
       handleSend(action);
     }
@@ -292,14 +355,23 @@ export default function AiChatbotWidget() {
                 )}
                 <span className="font-medium">{voiceToast}</span>
               </div>
-              {isListening && (
-                <button 
-                  onClick={toggleSpeechRecognition}
-                  className="text-[10px] uppercase font-bold text-red-400 underline"
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setVoiceLang(prev => prev === 'hi-IN' ? 'en-IN' : 'hi-IN')}
+                  className="text-[10px] font-bold px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-white transition-all"
+                  title="Switch Voice Language"
                 >
-                  Stop
+                  {voiceLang === 'hi-IN' ? '🇮🇳 हिंदी' : '🌐 Eng'}
                 </button>
-              )}
+                {isListening && (
+                  <button 
+                    onClick={toggleSpeechRecognition}
+                    className="text-[10px] uppercase font-bold text-red-400 underline"
+                  >
+                    Send Now
+                  </button>
+                )}
+              </div>
             </div>
           )}
 
@@ -374,7 +446,7 @@ export default function AiChatbotWidget() {
             </div>
           )}
 
-          {/* Input Row with Speech-To-Text Mic */}
+          {/* Input Row with Speech-To-Text Mic & Language Toggle */}
           <form 
             className="p-3 border-t border-white/[0.08] flex items-center gap-2 bg-[#0e1118]"
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
@@ -383,28 +455,49 @@ export default function AiChatbotWidget() {
             <button 
               type="button"
               onClick={toggleSpeechRecognition}
-              title={isListening ? "Stop Listening" : "Speak to AI Advisor (Speech-to-Text)"}
-              className={`p-2.5 rounded-xl border transition-all flex items-center justify-center ${
+              title={isListening ? "Stop & Send Voice Query" : `Speak in ${voiceLang === 'hi-IN' ? 'Hindi (हिंदी)' : 'English'}`}
+              className={`p-2.5 rounded-xl border transition-all flex items-center justify-center relative ${
                 isListening 
-                  ? 'mic-listening border-red-500 shadow-lg shadow-red-500/40' 
+                  ? 'mic-listening border-red-500 bg-red-500/20 text-red-400 shadow-lg shadow-red-500/40 animate-pulse' 
                   : 'bg-white/[0.04] hover:bg-white/[0.1] text-slate-400 hover:text-white border-white/[0.08]'
               }`}
             >
               {isListening ? (
-                <Mic className="w-4 h-4 text-white" />
+                <Mic className="w-4 h-4 text-red-400" />
               ) : (
                 <Mic className="w-4 h-4" />
               )}
+            </button>
+
+            {/* Language Switch Pill */}
+            <button
+              type="button"
+              onClick={() => {
+                const nextLang = voiceLang === 'hi-IN' ? 'en-IN' : 'hi-IN';
+                setVoiceLang(nextLang);
+                if (isListening && recognitionRef.current) {
+                  try { recognitionRef.current.stop(); } catch (e) {}
+                  setIsListening(false);
+                }
+              }}
+              title={`Active Voice Language: ${voiceLang === 'hi-IN' ? 'Hindi / Hinglish (Click to switch to English)' : 'English (Click to switch to Hindi)'}`}
+              className="px-2 py-1.5 rounded-lg bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-[10px] font-bold text-slate-300 hover:text-white transition-all flex-shrink-0"
+            >
+              {voiceLang === 'hi-IN' ? '🇮🇳 हि' : '🌐 En'}
             </button>
 
             {/* Input Box */}
             <input 
               ref={inputRef}
               type="text" 
-              placeholder={isListening ? "Listening to your voice..." : "Ask about pricing, tiers, or advice..."}
+              placeholder={
+                isListening 
+                  ? (voiceLang === 'hi-IN' ? "सुन रहे हैं... बोलिए (बोलना बंद करते ही उत्तर मिलेगा)" : "Listening... Speak now (auto-sends on pause)")
+                  : (voiceLang === 'hi-IN' ? "पूछिए या बोलिए (उदा. वेबसाइट का खर्च कितना है?)" : "Ask about pricing, tiers, or speak...")
+              }
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="flex-grow bg-white/[0.05] border border-white/[0.1] rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              className="flex-grow bg-white/[0.05] border border-white/[0.1] rounded-xl px-3 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
             />
 
             {/* Send Button */}

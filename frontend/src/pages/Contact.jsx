@@ -4,7 +4,7 @@ import {
   Sparkles, CheckCircle2, MessageSquare, MapPin, 
   Mail, Clock, ArrowUpRight, Lock, ShieldCheck, Send 
 } from 'lucide-react';
-import { getApiUrl } from '../apiConfig';
+import { getApiUrl, getWhatsAppUrl } from '../apiConfig';
 
 const TIER_OPTIONS = [
   { value: 'Tier 1 - Basic (Static Website)', label: 'Tier 1 — Basic (Static Website • ₹9,999)' },
@@ -140,7 +140,7 @@ export default function Contact() {
 
                   <div className="flex flex-wrap gap-3 justify-center pt-2">
                     <a 
-                      href={`https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I%20just%20submitted%20lead%20%23AMP-${submittedLead.lead_id}%20for%20${encodeURIComponent(formData.business_name)}.`}
+                      href={getWhatsAppUrl(`Hi AMP Ventures, I just submitted lead #AMP-${submittedLead.lead_id} for ${formData.business_name}.`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-6 py-3 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs shadow-lg flex items-center gap-2"
@@ -288,7 +288,7 @@ export default function Contact() {
                 </p>
 
                 <a 
-                  href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business."
+                  href={getWhatsAppUrl("Hi AMP Ventures, I'd like to consult about a website for my business.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all"

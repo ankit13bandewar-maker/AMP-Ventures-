@@ -139,7 +139,7 @@ async def notify_new_lead(lead: dict):
             <div style="background: #f8fafc; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #2563eb;">
                 <p style="margin: 0; font-size: 14px; color: #475569;">
                     Need immediate assistance? You can also message us directly on WhatsApp at 
-                    <a href="https://wa.me/919876543210" style="color: #16a34a; font-weight: bold;">+91 9876543210</a>.
+                    <a href="https://wa.me/{settings.WHATSAPP_NUMBER.replace('+', '').replace(' ', '').replace('-', '')}" style="color: #16a34a; font-weight: bold;">{settings.WHATSAPP_NUMBER}</a>.
                 </p>
             </div>
             <p style="font-size: 14px; color: #64748b; margin-top: 25px;">

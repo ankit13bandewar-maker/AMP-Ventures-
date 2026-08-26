@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Award, ArrowUp, MessageSquare, Phone, Mail } from 'lucide-react';
+import { WHATSAPP_DISPLAY, WHATSAPP_NUMBER, getWhatsAppUrl } from '../apiConfig';
 
 export default function Footer() {
   const scrollToTop = () => {
@@ -19,41 +20,35 @@ export default function Footer() {
         <div className="footer-columns-grid">
           {/* Column 1: Brand & Certification */}
           <div className="footer-brand-col">
-            <Link to="/" className="brand-logo" style={{ marginBottom: '1rem', textDecoration: 'none' }}>
-              <div className="w-8 h-8 rounded-lg bg-lime-accent/10 border border-lime-accent/30 flex items-center justify-center text-lime-accent">
-                <Sparkles className="w-4 h-4" />
-              </div>
-              <div>
-                <div className="brand-text" style={{ fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.02em', color: '#fff' }}>
-                  AMP <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">VENTURES</span>
-                </div>
-                <span className="brand-tag" style={{ color: 'var(--primary-light)', fontSize: '0.7rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                  Web Engineering Agency
-                </span>
-              </div>
+            <Link to="/" className="inline-flex items-center gap-2 mb-4 group">
+              <span className="font-extrabold text-lg tracking-tight text-white group-hover:text-lime-accent transition-colors">
+                AMP <span className="text-lime-accent">Ventures</span>
+              </span>
             </Link>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '1.25rem', maxWidth: '300px' }}>
-              Specialized web engineering, WhatsApp automation & local SEO for brick-and-mortar businesses.
+            <p className="footer-tagline text-xs text-slate-400 leading-relaxed mb-6">
+              Specialized web engineering, WhatsApp booking automations, and local Google SEO engineered for offline business growth.
             </p>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '0.5rem 0.85rem', borderRadius: '8px' }}>
-              <Award className="w-4 h-4 text-lime-accent" />
-              <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--primary-light)' }}>Enterprise Web Architecture & Security</span>
+            <div className="footer-cert-badge">
+              <span className="cert-icon-wrap">
+                <Award className="w-3.5 h-3.5 text-lime-accent" />
+              </span>
+              <span>100% Code Ownership • Zero Rent</span>
             </div>
           </div>
 
-          {/* Column 2: Explore */}
+          {/* Column 2: Quick Links */}
           <div className="footer-nav-col">
-            <h4 className="footer-title">Explore</h4>
+            <h4 className="footer-title">Navigation</h4>
             <ul className="footer-list">
               <li><Link to="/" className="footer-link">Home</Link></li>
-              <li><Link to="/about" className="footer-link">About Agency</Link></li>
-              <li><Link to="/services" className="footer-link">Service Tiers</Link></li>
-              <li><Link to="/pricing" className="footer-link">Pricing & Plans</Link></li>
-              <li><Link to="/blog" className="footer-link">Insights & Blog</Link></li>
+              <li><Link to="/services" className="footer-link">3-Tier Solutions</Link></li>
+              <li><Link to="/pricing" className="footer-link">Transparent Pricing</Link></li>
+              <li><Link to="/readiness-score" className="footer-link">Digital Audit Score</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact Studio</Link></li>
             </ul>
           </div>
 
-          {/* Column 3: Our Solutions */}
+          {/* Column 3: Solutions */}
           <div className="footer-nav-col">
             <h4 className="footer-title">Solutions</h4>
             <ul className="footer-list">
@@ -70,9 +65,9 @@ export default function Footer() {
             <h4 className="footer-title">Direct Contact</h4>
             <ul className="footer-list footer-contact-list">
               <li>
-                <a href="tel:+919876543210" className="footer-contact-link flex items-center gap-2">
+                <a href={`tel:+${WHATSAPP_NUMBER}`} className="footer-contact-link flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-slate-400" />
-                  <span>+91 9876543210</span>
+                  <span>{WHATSAPP_DISPLAY}</span>
                 </a>
               </li>
               <li>
@@ -83,7 +78,7 @@ export default function Footer() {
               </li>
               <li style={{ marginTop: '0.6rem' }}>
                 <a 
-                  href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business." 
+                  href={getWhatsAppUrl("Hi AMP Ventures, I'd like to consult about a website for my business.")} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-emerald-500/15 border border-emerald-500/35 text-emerald-400 text-xs font-bold hover:bg-emerald-500/25 transition-all"

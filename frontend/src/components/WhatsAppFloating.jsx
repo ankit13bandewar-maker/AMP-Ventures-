@@ -1,7 +1,8 @@
 import React from 'react';
+import { getWhatsAppUrl } from '../apiConfig';
 
 export default function WhatsAppFloating() {
-  const whatsappUrl = "https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'm%20interested%20in%20taking%20my%20offline%20business%20online.%20Can%20we%20schedule%20a%20consultation?";
+  const whatsappUrl = getWhatsAppUrl("Hi AMP Ventures, I'm interested in taking my offline business online. Can we schedule a consultation?");
 
   return (
     <a 

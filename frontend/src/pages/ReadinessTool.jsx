@@ -4,7 +4,7 @@ import {
   Sparkles, CheckCircle2, AlertTriangle, ArrowUpRight, 
   MessageSquare, Activity, Check, RefreshCw 
 } from 'lucide-react';
-import { getApiUrl } from '../apiConfig';
+import { getApiUrl, getWhatsAppUrl } from '../apiConfig';
 
 const INDUSTRIES = [
   'Salon & Luxury Spa',
@@ -367,7 +367,7 @@ export default function ReadinessTool() {
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </Link>
                   <a 
-                    href={`https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I%20got%20a%20score%20of%20${result.score}/100%20for%20${encodeURIComponent(form.business_name)}%20and%20want%20to%20improve%20it.`}
+                    href={getWhatsAppUrl(`Hi AMP Ventures, I got a score of ${result.score}/100 for ${form.business_name} and want to improve it.`)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-5 py-2.5 rounded-xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold text-xs flex items-center gap-1.5"

@@ -18,7 +18,7 @@ class Settings(BaseModel):
     AGENCY_NAME: str = "AMP VENTURES"
     FOUNDER_NAME: str = "Founder & Lead Architect"
     FOUNDER_CREDENTIALS: str = "IIT Roorkee AI/ML Certified | CCNA"
-    WHATSAPP_NUMBER: str = os.getenv("WHATSAPP_NUMBER", "+919876543210")
+    WHATSAPP_NUMBER: str = os.getenv("WHATSAPP_NUMBER", "+917000384330")
     
     # Security & Admin Authentication
     ADMIN_SECRET_KEY: str = os.getenv("ADMIN_SECRET_KEY", "amp_admin_secret_key_2026")

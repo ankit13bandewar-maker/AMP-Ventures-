@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import MockupGenerator from '../components/MockupGenerator.jsx';
 import FaqSection from '../components/FaqSection.jsx';
+import { getWhatsAppUrl } from '../apiConfig';
 
 const TRUST_BADGES = [
   { icon: Award, title: 'High-Performance Code', desc: 'Sub-Second Core Web Vitals' },
@@ -22,14 +23,14 @@ const TRANSFORMATION_ITEMS = [
     metric: '+145% Bookings',
     badgeClass: 'bg-lime-400/10 text-lime-400 border border-lime-400/25',
     offlinePoints: [
-      'Manual phone calls interrupting stylists',
-      'Empty mid-week appointment slots',
-      'Zero verified Google Maps reviews'
+      'Manual Calls',
+      'Empty Slots',
+      'Zero Reviews'
     ],
     solutionPoints: [
-      '24/7 1-click WhatsApp slot booking',
-      'Digital stylist portfolio & service menu',
-      'Automated Google Review collection engine'
+      'WhatsApp Booking',
+      'Digital Menu',
+      'Auto Reviews'
     ]
   },
   {
@@ -38,14 +39,14 @@ const TRANSFORMATION_ITEMS = [
     metric: '+210% Direct Orders',
     badgeClass: 'bg-sky-400/10 text-sky-400 border border-sky-400/25',
     offlinePoints: [
-      'Paying 25-30% aggregator commissions',
-      'Costly printed menus with outdated prices',
-      'Slow manual ordering during peak rush'
+      'High Commissions',
+      'Paper Menus',
+      'Slow Ordering'
     ],
     solutionPoints: [
-      'Direct table QR digital ordering menu',
-      'Interactive 3D dish previews on mobile',
-      'Instant WhatsApp table confirmations'
+      'QR Ordering',
+      '3D Food',
+      'Instant Tables'
     ]
   },
   {
@@ -54,14 +55,14 @@ const TRANSFORMATION_ITEMS = [
     metric: '+180% Repeat Sales',
     badgeClass: 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/25',
     offlinePoints: [
-      'Sales limited strictly to store opening hours',
-      'No customer catalog database',
-      'Zero outstation inquiries'
+      'Limited Hours',
+      'No Catalog',
+      'Zero Reach'
     ],
     solutionPoints: [
-      'Always-on digital luxury catalog',
-      'Direct WhatsApp checkout & payment links',
-      'Automated new-arrival announcement alerts'
+      '24/7 Catalog',
+      'WhatsApp Checkout',
+      'Direct Alerts'
     ]
   }
 ];
@@ -126,7 +127,7 @@ export default function Home() {
             </Link>
 
             <a 
-              href="https://wa.me/919876543210?text=Hi%20AMP%20Ventures,%20I'd%20like%20to%20consult%20about%20a%20website%20for%20my%20business." 
+              href={getWhatsAppUrl("Hi AMP Ventures, I'd like to consult about a website for my business.")} 
               target="_blank" 
               rel="noopener noreferrer" 
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full font-semibold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all text-sm sm:text-base"
@@ -157,129 +158,132 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Asymmetric Bento Grid Showcase */}
-      <section className="py-20">
+      {/* 2. Feature Grid Showcase (Longer Boxes with Clear Readable Typography) */}
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-400/10 border border-indigo-400/20 mb-3">
               <Layers className="w-3.5 h-3.5" />
               <span>Full-Stack Architecture</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
-              Engineered Specifically For <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">High-Conversion Local Growth</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 leading-tight">
+              Engineered For <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">High-Conversion Local Growth</span>
             </h2>
             <p className="text-slate-400 text-sm sm:text-base">
-              Every website we build is integrated with our proven offline-to-online growth stack.
+              Everything your website needs to turn visitors into paying customers.
             </p>
           </div>
 
-          {/* Mobile Swipe Hint */}
-          <div className="flex md:hidden items-center justify-center gap-1.5 text-[11px] text-slate-400 font-semibold mb-4">
-            <span>← Swipe to explore architecture →</span>
-          </div>
-
-          {/* Bento Grid (Swipeable on mobile, Grid on desktop) */}
-          <div className="mobile-snap-carousel md:grid md:grid-cols-12 gap-6 no-scrollbar">
+          {/* 2-Column Balanced Grid with Longer Boxes & Clear Typography */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             
-            {/* Bento Card 1 (Large 7 Cols): Live WhatsApp Booking Simulator */}
-            <div className="mobile-snap-card md:col-span-7 p-6 sm:p-7 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-lime-accent/40 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="badge badge-accent badge-sm font-bold">Feature 01</span>
-                  <span className="text-[11px] text-slate-500 font-mono">0.1s Trigger</span>
+            {/* Feature 01: WhatsApp Booking */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-lime-accent/40 transition-all flex flex-col justify-between">
+              <div className="mb-4">
+                <div className="mb-2.5">
+                  <span className="badge badge-accent badge-sm font-bold text-xs">Feature 01</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">1-Click WhatsApp Booking Engine</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-4 sm:mb-6 leading-relaxed">
-                  No complex signups. Customers book slots, reserve tables, or request quotes directly on WhatsApp.
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">1-Click WhatsApp Booking</h3>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Direct appointment booking and customer inquiries with zero friction.
                 </p>
               </div>
 
-              {/* WhatsApp Chat Simulation Bubble */}
-              <div className="p-3 sm:p-4 rounded-xl bg-[#0a0d14] border border-white/[0.06] space-y-2.5 font-sans text-xs">
+              {/* WhatsApp Chat Simulation */}
+              <div className="p-3 sm:p-3.5 rounded-xl bg-[#0a0d14] border border-white/[0.06] space-y-2 font-sans">
                 <div className="flex items-start gap-2">
-                  <div className="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">User</div>
-                  <div className="p-2 rounded-lg rounded-tl-none bg-[#1e2638] text-slate-200 max-w-[85%] text-[11px]">
+                  <div className="w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">U</div>
+                  <div className="px-2.5 py-1.5 rounded-lg rounded-tl-none bg-[#1e2638] text-slate-200 text-xs leading-normal">
                     Can I book a slot for tomorrow at 4 PM?
                   </div>
                 </div>
                 <div className="flex items-start justify-end gap-2">
-                  <div className="p-2 rounded-lg rounded-tr-none bg-emerald-900/60 border border-emerald-500/30 text-emerald-100 max-w-[85%] text-[11px]">
-                    ✨ Confirmed! Slot booked for tomorrow 4:00 PM.
+                  <div className="px-2.5 py-1.5 rounded-lg rounded-tr-none bg-emerald-900/60 border border-emerald-500/30 text-emerald-100 text-xs leading-normal">
+                    ✨ Confirmed! Slot booked for 4:00 PM.
                   </div>
-                  <div className="w-6 h-6 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">Bot</div>
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">✓</div>
                 </div>
               </div>
             </div>
 
-            {/* Bento Card 2 (5 Cols): Google Maps #1 Ranking */}
-            <div className="mobile-snap-card md:col-span-5 p-6 sm:p-7 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-sky-400/40 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="badge badge-info badge-sm font-bold">Feature 02</span>
-                  <span className="text-[11px] text-sky-400 font-bold">Local SEO</span>
+            {/* Feature 02: Google Maps Search Dominance */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-sky-400/40 transition-all flex flex-col justify-between">
+              <div className="mb-4">
+                <div className="mb-2.5">
+                  <span className="badge badge-info badge-sm font-bold text-xs">Feature 02</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">Google Maps Search Dominance</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-4 leading-relaxed">
-                  Full Google Business Profile sync so your business appears #1 when nearby clients search.
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">Google Maps Dominance</h3>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Rank #1 on Google Maps when nearby clients search for your services.
                 </p>
               </div>
 
-              <div className="p-3.5 rounded-xl bg-[#0a0d14] border border-white/[0.06] flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <MapPin className="w-6 h-6 text-sky-400 flex-shrink-0" />
+              {/* Google Maps Ranking Proof */}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#0a0d14] border border-white/[0.06] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-5 h-5 text-sky-400 flex-shrink-0" />
                   <div>
-                    <div className="text-xs font-bold text-white">"Best Salon Near Me"</div>
-                    <div className="text-[10px] text-emerald-400 font-semibold">Rank #1 on Google Maps</div>
+                    <div className="text-xs sm:text-sm font-bold text-white leading-tight">"Best Local Business Near Me"</div>
+                    <div className="text-[11px] sm:text-xs text-emerald-400 font-semibold mt-0.5">Rank #1 on Google Maps</div>
                   </div>
                 </div>
-                <div className="text-base font-extrabold text-white font-mono">4.9 ★</div>
+                <div className="text-base sm:text-lg font-extrabold text-white font-mono">4.9 ★</div>
               </div>
             </div>
 
-            {/* Bento Card 3 (5 Cols): 100% Code Ownership */}
-            <div className="mobile-snap-card md:col-span-5 p-6 sm:p-7 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-indigo-400/40 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="badge badge-primary badge-sm font-bold">Feature 03</span>
-                  <span className="text-[11px] text-indigo-400 font-bold">Zero Lock-in</span>
+            {/* Feature 03: 100% Asset Ownership */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-indigo-400/40 transition-all flex flex-col justify-between">
+              <div className="mb-4">
+                <div className="mb-2.5">
+                  <span className="badge badge-primary badge-sm font-bold text-xs">Feature 03</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">100% Code & Domain Ownership</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-4 leading-relaxed">
-                  You own your code and domain completely. Zero monthly software rent or surprise fees.
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">100% Asset Ownership</h3>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Complete code and domain ownership with zero monthly software fees.
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-xs text-slate-300 font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-lime-accent flex-shrink-0" />
-                <span>Zero recurring platform subscription fees</span>
+
+              {/* Ownership Proof Element */}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#0a0d14] border border-white/[0.06] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <ShieldCheck className="w-5 h-5 text-indigo-400 flex-shrink-0" />
+                  <div>
+                    <div className="text-xs sm:text-sm font-bold text-white leading-tight">Full Asset Transfer</div>
+                    <div className="text-[11px] sm:text-xs text-indigo-300 font-semibold mt-0.5">Zero monthly platform rent</div>
+                  </div>
+                </div>
+                <span className="text-xs font-mono px-2.5 py-1 rounded-md bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 font-bold">100% Yours</span>
               </div>
             </div>
 
-            {/* Bento Card 4 (7 Cols): Ultra-Fast Performance */}
-            <div className="mobile-snap-card md:col-span-7 p-6 sm:p-7 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-emerald-400/40 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <span className="badge badge-success badge-sm font-bold">Feature 04</span>
-                  <span className="text-[11px] text-emerald-400 font-bold">Sub-Second</span>
+            {/* Feature 04: Loads Instantly */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-[#111522] border border-white/[0.08] hover:border-emerald-400/40 transition-all flex flex-col justify-between">
+              <div className="mb-4">
+                <div className="mb-2.5">
+                  <span className="badge badge-success badge-sm font-bold text-xs">Feature 04</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">0.4s High-Speed Engine</h3>
-                <p className="text-slate-400 text-xs sm:text-sm mb-4 leading-relaxed">
-                  FastAPI asynchronous backend with React client. Fast page load means zero bounce rate.
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 leading-snug">Loads Instantly</h3>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Ultra-fast page loads so visitors never bounce before exploring.
                 </p>
               </div>
-              
-              <div className="grid grid-cols-3 gap-3 text-center">
-                <div className="p-3 rounded-lg bg-[#0a0d14] border border-white/[0.04]">
-                  <div className="text-lg font-bold text-lime-accent font-mono">&lt; 0.4s</div>
-                  <div className="text-[10px] text-slate-400">Load Time</div>
+
+              {/* Compressed 3-Stat Horizontal Strip */}
+              <div className="p-3.5 sm:p-4 rounded-xl bg-[#0a0d14] border border-white/[0.06] flex items-center justify-around text-center">
+                <div>
+                  <div className="text-sm sm:text-base font-bold text-lime-accent font-mono leading-tight">&lt; 0.4s</div>
+                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">Load Time</div>
                 </div>
-                <div className="p-3 rounded-lg bg-[#0a0d14] border border-white/[0.04]">
-                  <div className="text-lg font-bold text-sky-400 font-mono">100/100</div>
-                  <div className="text-[10px] text-slate-400">SEO Score</div>
+                <div className="h-6 w-px bg-white/[0.08]" />
+                <div>
+                  <div className="text-sm sm:text-base font-bold text-sky-400 font-mono leading-tight">100/100</div>
+                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">SEO Score</div>
                 </div>
-                <div className="p-3 rounded-lg bg-[#0a0d14] border border-white/[0.04]">
-                  <div className="text-lg font-bold text-emerald-400 font-mono">99.9%</div>
-                  <div className="text-[10px] text-slate-400">Uptime SLA</div>
+                <div className="h-6 w-px bg-white/[0.08]" />
+                <div>
+                  <div className="text-sm sm:text-base font-bold text-emerald-400 font-mono leading-tight">99.9%</div>
+                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">Uptime SLA</div>
                 </div>
               </div>
             </div>
