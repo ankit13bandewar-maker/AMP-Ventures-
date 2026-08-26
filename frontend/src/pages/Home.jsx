@@ -81,15 +81,15 @@ export default function Home() {
 
           {/* Main Headline */}
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-[1.15] mb-4 sm:mb-6">
-            We Turn Offline Footfall Into <br />
+            We Build the Online Presence <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-accent via-sky-400 to-indigo-400">
-              Automated Digital Revenue
+              Your Business Is Missing
             </span>
           </h1>
 
-          {/* Subtitle - Punchy on mobile, detailed on desktop */}
+          {/* Subtitle */}
           <p className="text-sm sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8">
-            High-converting web apps, automated WhatsApp booking engines, and Google Maps local SEO for salons, clinics, restaurants, and retail boutiques.
+            We build websites, automated booking, and local search visibility — so every customer searching nearby finds you first.
           </p>
 
           {/* Mobile Quick Value Chips */}
