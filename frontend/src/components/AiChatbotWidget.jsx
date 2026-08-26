@@ -216,15 +216,15 @@ export default function AiChatbotWidget() {
       <button 
         className="floating-btn floating-chatbot text-white" 
         onClick={() => setIsOpen(!isOpen)}
-        title="Chat with AMP Ventures AI Advisor"
-        aria-label="Toggle AI Chat"
+        title="Chat with AMP Studio Advisor"
+        aria-label="Toggle Studio Chat"
       >
         {isOpen ? (
           <X className="w-6 h-6 text-white" />
         ) : (
           <div className="relative flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-white drop-shadow" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-lime-accent rounded-full border-2 border-[#08090d] animate-pulse"></span>
+            <MessageSquare className="w-5 h-5 text-white drop-shadow fill-white/10" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-lime-accent rounded-full border-2 border-[#08090d] animate-pulse"></span>
           </div>
         )}
       </button>
@@ -239,7 +239,7 @@ export default function AiChatbotWidget() {
               <div className="relative">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-lime-accent/80 p-[1.5px] shadow-md shadow-indigo-500/20">
                   <div className="w-full h-full rounded-[10px] bg-[#0c0f17] flex items-center justify-center text-lime-accent">
-                    <Sparkles className="w-4 h-4" />
+                    <MessageSquare className="w-4 h-4" />
                   </div>
                 </div>
                 <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-400 rounded-full border-2 border-[#0e1118]"></span>
@@ -247,8 +247,8 @@ export default function AiChatbotWidget() {
               
               <div>
                 <div className="text-sm font-extrabold text-white flex items-center gap-1.5">
-                  <span>AMP AI Advisor</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">2.0</span>
+                  <span>AMP Project Advisor</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-semibold border border-indigo-500/30">Live</span>
                 </div>
                 <div className="text-[11px] text-emerald-400 font-medium flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
