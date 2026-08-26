@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, ArrowUpRight, ShieldCheck, CheckCircle2, 
   TrendingUp, MessageSquare, MapPin, Zap, Clock, 
-  Layers, PhoneCall, QrCode, Globe, Check, Award, SlidersHorizontal
+  Layers, PhoneCall, QrCode, Globe, Check, Award
 } from 'lucide-react';
 import MockupGenerator from '../components/MockupGenerator.jsx';
 import FaqSection from '../components/FaqSection.jsx';
@@ -15,19 +15,12 @@ const TRUST_BADGES = [
   { icon: TrendingUp, title: '100% Ownership', desc: 'Zero Monthly Software Retainers' },
 ];
 
-const ROI_DATA = {
-  salon: { label: 'Salon & Luxury Spa', avgTicket: 1200, onlineBookingRate: 0.35 },
-  clinic: { label: 'Healthcare & Clinic', avgTicket: 1500, onlineBookingRate: 0.40 },
-  restaurant: { label: 'Restaurant & Cafe', avgTicket: 800, onlineBookingRate: 0.25 },
-  boutique: { label: 'Retail & Boutique', avgTicket: 2000, onlineBookingRate: 0.20 }
-};
-
 const TRANSFORMATION_ITEMS = [
   {
     icon: MapPin,
     industry: 'Salons & Luxury Spas',
-    metric: '+145% weekly bookings',
-    badgeColor: 'badge-accent',
+    metric: '+145% Bookings',
+    badgeClass: 'bg-lime-400/10 text-lime-400 border border-lime-400/25',
     offlinePoints: [
       'Manual phone calls interrupting stylists',
       'Empty mid-week appointment slots',
@@ -42,8 +35,8 @@ const TRANSFORMATION_ITEMS = [
   {
     icon: QrCode,
     industry: 'Restaurants & Cafes',
-    metric: '+210% direct table orders',
-    badgeColor: 'badge-info',
+    metric: '+210% Direct Orders',
+    badgeClass: 'bg-sky-400/10 text-sky-400 border border-sky-400/25',
     offlinePoints: [
       'Paying 25-30% aggregator commissions',
       'Costly printed menus with outdated prices',
@@ -58,8 +51,8 @@ const TRANSFORMATION_ITEMS = [
   {
     icon: Globe,
     industry: 'Retail & Boutiques',
-    metric: '+180% repeat customers',
-    badgeColor: 'badge-success',
+    metric: '+180% Repeat Sales',
+    badgeClass: 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/25',
     offlinePoints: [
       'Sales limited strictly to store opening hours',
       'No customer catalog database',
@@ -74,14 +67,6 @@ const TRANSFORMATION_ITEMS = [
 ];
 
 export default function Home() {
-  const [selectedIndustry, setSelectedIndustry] = useState('salon');
-  const [monthlyFootfall, setMonthlyFootfall] = useState(400);
-
-  // Dynamic ROI calculation
-  const industryConfig = ROI_DATA[selectedIndustry];
-  const estimatedNewOnlineBookings = Math.round(monthlyFootfall * industryConfig.onlineBookingRate * 0.45);
-  const estimatedMonthlyBoost = estimatedNewOnlineBookings * industryConfig.avgTicket;
-
   return (
     <div className="home-page pt-24">
       {/* 1. Hero Section */}
@@ -172,92 +157,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 2. Interactive Live ROI Revenue Calculator */}
-      <section className="py-12 bg-[#0e1118]/60 border-y border-white/[0.08]">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="p-8 rounded-2xl bg-[#151a26]/90 border border-white/[0.1] shadow-2xl backdrop-blur-xl">
-            
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider text-sky-400 bg-sky-400/10 border border-sky-400/20 mb-2">
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                  <span>Interactive Growth Simulator</span>
-                </div>
-                <h3 className="text-2xl font-extrabold text-white">How much revenue are you losing offline?</h3>
-              </div>
-              
-              {/* Industry Selector */}
-              <div className="flex flex-wrap gap-1.5">
-                {Object.keys(ROI_DATA).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedIndustry(key)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      selectedIndustry === key
-                        ? 'bg-lime-accent text-slate-950 shadow-md'
-                        : 'bg-white/[0.05] text-slate-400 hover:text-white'
-                    }`}
-                  >
-                    {ROI_DATA[key].label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Slider Controls */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-              <div className="md:col-span-7 space-y-6">
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm font-semibold text-slate-300">Estimated Monthly Walk-ins / Clients</span>
-                    <span className="text-sm font-bold text-lime-accent font-mono">{monthlyFootfall} customers</span>
-                  </div>
-                  <input
-                    type="range"
-                    min="100"
-                    max="2000"
-                    step="50"
-                    value={monthlyFootfall}
-                    onChange={(e) => setMonthlyFootfall(Number(e.target.value))}
-                    className="range range-accent range-sm w-full cursor-pointer accent-[#d2f829]"
-                  />
-                  <div className="w-full flex justify-between text-[11px] text-slate-500 px-1 mt-1 font-mono">
-                    <span>100</span>
-                    <span>500</span>
-                    <span>1,000</span>
-                    <span>2,000+</span>
-                  </div>
-                </div>
-
-                <div className="text-xs text-slate-400 bg-white/[0.03] p-3.5 rounded-xl border border-white/[0.05]">
-                  💡 <strong>How this works:</strong> Offline businesses without 24/7 digital booking lose ~35% of potential clients who search after business hours or leave without scheduling their next appointment.
-                </div>
-              </div>
-
-              {/* Calculated Output Stat Box */}
-              <div className="md:col-span-5 p-6 rounded-xl bg-gradient-to-br from-[#1b2234] to-[#121624] border border-lime-accent/30 shadow-lg text-center space-y-3">
-                <div className="text-xs font-bold uppercase tracking-wider text-slate-400">Estimated Monthly Revenue Gain</div>
-                <div className="text-3xl lg:text-4xl font-extrabold text-lime-accent font-mono">
-                  +₹{estimatedMonthlyBoost.toLocaleString('en-IN')}
-                </div>
-                <div className="text-xs text-slate-300 font-medium">
-                  from <span className="text-white font-bold font-mono">+{estimatedNewOnlineBookings}</span> automated online bookings/mo
-                </div>
-                <Link
-                  to={`/contact?tier=tier2&industry=${selectedIndustry}`}
-                  className="inline-flex items-center justify-center gap-1.5 w-full py-2.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.15] text-xs font-bold text-white border border-white/[0.1] transition-all"
-                >
-                  <span>Claim Your Custom Setup</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Asymmetric Bento Grid Showcase */}
+      {/* 2. Asymmetric Bento Grid Showcase */}
       <section className="py-20">
         <div className="container mx-auto px-4 max-w-6xl">
           
@@ -421,9 +321,11 @@ export default function Home() {
             {TRANSFORMATION_ITEMS.map((item, idx) => (
               <div key={idx} className="mobile-snap-card p-6 sm:p-7 rounded-2xl bg-[#111522] border border-white/[0.08] flex flex-col justify-between hover:border-white/[0.18] transition-all">
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-base sm:text-lg font-bold text-white">{item.industry}</h3>
-                    <span className={`badge ${item.badgeColor} badge-sm font-semibold text-[10px]`}>{item.metric}</span>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <h3 className="text-base sm:text-lg font-bold text-white leading-snug">{item.industry}</h3>
+                    <span className={`px-2.5 py-1 rounded-full font-bold text-[10px] sm:text-[11px] whitespace-nowrap flex-shrink-0 shadow-sm ${item.badgeClass}`}>
+                      {item.metric}
+                    </span>
                   </div>
 
                   {/* Offline Bottleneck */}
