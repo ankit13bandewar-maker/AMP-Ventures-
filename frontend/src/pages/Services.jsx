@@ -98,66 +98,66 @@ export default function Services() {
   return (
     <div className="services-page pt-28 pb-20">
       {/* Header */}
-      <section className="py-12 text-center">
+      <section className="py-8 sm:py-12 text-center">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-sky-400 mb-6 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.12] text-xs font-semibold uppercase tracking-wider text-sky-400 mb-4 sm:mb-6 shadow-inner">
             <Zap className="w-3.5 h-3.5" />
             <span>Tailored Architecture & Solutions</span>
           </div>
           
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-            Engineering Packages Engineered for <br />
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 sm:mb-6 leading-tight">
+            Engineering Packages Built for <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-indigo-400 to-lime-accent">
               Measurable Local ROI
             </span>
           </h1>
 
-          <p className="text-slate-400 text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className="text-slate-400 text-sm sm:text-lg leading-relaxed max-w-2xl mx-auto">
             From rapid 5-day launches to immersive 3D interactive experiences, we provide clean, predictable development packages designed for offline businesses.
           </p>
         </div>
       </section>
 
       {/* 3 Detailed Service Cards */}
-      <section className="py-10">
-        <div className="container mx-auto px-4 max-w-6xl space-y-12">
+      <section className="py-6 sm:py-10">
+        <div className="container mx-auto px-4 max-w-6xl space-y-8 sm:space-y-12">
           {SERVICES_DATA.map((srv) => (
             <div 
               id={srv.id} 
               key={srv.id} 
-              className={`p-8 lg:p-12 rounded-3xl bg-[#111522] border ${srv.isPopular ? 'border-sky-400/50 shadow-2xl shadow-sky-500/10' : srv.isPlus ? 'border-lime-accent/50 shadow-2xl shadow-lime-accent/10' : 'border-white/[0.08]'} transition-all`}
+              className={`p-6 sm:p-8 lg:p-12 rounded-3xl bg-[#111522] border ${srv.isPopular ? 'border-sky-400/50 shadow-2xl shadow-sky-500/10' : srv.isPlus ? 'border-lime-accent/50 shadow-2xl shadow-lime-accent/10' : 'border-white/[0.08]'} transition-all`}
             >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
                 
                 <div className="lg:col-span-5 space-y-4">
                   <div className="flex items-center gap-2">
-                    <span className={`badge ${srv.badgeColor} badge-sm font-bold uppercase tracking-wider`}>
+                    <span className={`badge ${srv.badgeColor} badge-sm font-bold uppercase tracking-wider text-[10px]`}>
                       {srv.tierNumber}
                     </span>
-                    {srv.isPopular && <span className="text-xs font-bold text-sky-400">Most Popular</span>}
-                    {srv.isPlus && <span className="text-xs font-bold text-lime-accent">Next-Gen Tech</span>}
+                    {srv.isPopular && <span className="text-xs font-bold text-sky-400">⭐ Most Popular</span>}
+                    {srv.isPlus && <span className="text-xs font-bold text-lime-accent">🚀 Next-Gen Tech</span>}
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{srv.name}</h2>
-                  <p className="text-slate-400 text-sm leading-relaxed">{srv.tagline}</p>
+                  <h2 className="text-xl sm:text-3xl font-extrabold text-white">{srv.name}</h2>
+                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">{srv.tagline}</p>
 
-                  <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1">
-                    <div className="text-xs text-slate-400">Investment starting at</div>
-                    <div className="text-3xl font-extrabold text-white font-mono">{srv.startingPrice}</div>
-                    <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-1">
+                  <div className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1">
+                    <div className="text-[11px] text-slate-400">Investment starting at</div>
+                    <div className="text-2xl sm:text-3xl font-extrabold text-white font-mono">{srv.startingPrice}</div>
+                    <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
                       <Clock className="w-3.5 h-3.5 text-slate-500" />
                       <span>{srv.timeline}</span>
                     </div>
                   </div>
 
-                  <div className="text-xs text-slate-400 bg-[#0a0d14] p-4 rounded-xl border border-white/[0.04]">
+                  <div className="text-xs text-slate-400 bg-[#0a0d14] p-3.5 sm:p-4 rounded-xl border border-white/[0.04]">
                     <strong className="text-slate-200 block mb-1">Ideal For:</strong>
                     {srv.idealFor}
                   </div>
 
                   <Link 
                     to={srv.ctaLink} 
-                    className={`w-full py-3.5 rounded-xl font-bold text-sm text-center shadow-lg flex items-center justify-center gap-2 transition-all ${
+                    className={`w-full py-3 sm:py-3.5 rounded-xl font-bold text-xs sm:text-sm text-center shadow-lg flex items-center justify-center gap-2 transition-all ${
                       srv.isPopular ? 'bg-sky-400 hover:bg-sky-300 text-slate-950' : srv.isPlus ? 'bg-lime-accent hover:bg-lime-400 text-slate-950' : 'bg-white/[0.08] hover:bg-white/[0.15] text-white border border-white/[0.1]'
                     }`}
                   >
@@ -166,21 +166,21 @@ export default function Services() {
                   </Link>
                 </div>
 
-                <div className="lg:col-span-7 space-y-6">
-                  <h3 className="text-base font-bold text-white uppercase tracking-wider text-xs border-b border-white/[0.08] pb-2">
+                <div className="lg:col-span-7 space-y-4 sm:space-y-6">
+                  <h3 className="text-xs font-bold text-white uppercase tracking-wider border-b border-white/[0.08] pb-2">
                     Included Architecture Deliverables:
                   </h3>
                   
-                  <ul className="space-y-3">
+                  <ul className="space-y-2.5 sm:space-y-3">
                     {srv.highlights.map((h, hIdx) => (
-                      <li key={hIdx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-300">
-                        <Check className={`w-4 h-4 flex-shrink-0 mt-0.5 ${srv.isPopular ? 'text-sky-400' : srv.isPlus ? 'text-lime-accent' : 'text-slate-400'}`} />
+                      <li key={hIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
+                        <Check className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 mt-0.5 ${srv.isPopular ? 'text-sky-400' : srv.isPlus ? 'text-lime-accent' : 'text-slate-400'}`} />
                         <span>{h}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-between">
+                  <div className="p-3.5 sm:p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-400 flex items-center justify-between">
                     <span><strong>Stack:</strong> {srv.techStack}</span>
                     <span className="text-emerald-400 font-semibold font-mono">100% Owned</span>
                   </div>
@@ -193,30 +193,30 @@ export default function Services() {
       </section>
 
       {/* Feature Matrix Comparison Table */}
-      <section className="py-16">
+      <section className="py-12 sm:py-16">
         <div className="container mx-auto px-4 max-w-5xl">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-extrabold text-white mb-3">Feature Comparison Matrix</h2>
-            <p className="text-slate-400 text-sm">Detailed side-by-side breakdown of all deliverables across our 3 tiers.</p>
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 sm:mb-3">Feature Comparison Matrix</h2>
+            <p className="text-slate-400 text-xs sm:text-sm">Detailed side-by-side breakdown of all deliverables across our 3 tiers.</p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#111522]">
-            <table className="table w-full text-xs sm:text-sm">
+          <div className="overflow-x-auto rounded-2xl border border-white/[0.08] bg-[#111522] no-scrollbar">
+            <table className="table w-full text-xs sm:text-sm min-w-[500px]">
               <thead className="bg-[#0a0d14] text-slate-300 font-bold border-b border-white/[0.08]">
                 <tr>
-                  <th className="py-4 px-6 text-left">Platform Capabilities</th>
-                  <th className="py-4 px-6 text-center text-slate-400">Tier 1 (Basic)</th>
-                  <th className="py-4 px-6 text-center text-sky-400">Tier 2 (CMS)</th>
-                  <th className="py-4 px-6 text-center text-lime-accent">Tier 3 (3D & AI)</th>
+                  <th className="py-3.5 px-4 sm:px-6 text-left">Platform Capabilities</th>
+                  <th className="py-3.5 px-4 sm:px-6 text-center text-slate-400">Tier 1 (Basic)</th>
+                  <th className="py-3.5 px-4 sm:px-6 text-center text-sky-400">Tier 2 (CMS)</th>
+                  <th className="py-3.5 px-4 sm:px-6 text-center text-lime-accent">Tier 3 (3D & AI)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.04]">
                 {MATRIX_FEATURES.map((feat, fIdx) => (
                   <tr key={fIdx} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3.5 px-6 font-semibold text-white">{feat.name}</td>
-                    <td className="py-3.5 px-6 text-center text-slate-400">{feat.t1}</td>
-                    <td className="py-3.5 px-6 text-center text-sky-300 font-medium">{feat.t2}</td>
-                    <td className="py-3.5 px-6 text-center text-lime-accent font-semibold">{feat.t3}</td>
+                    <td className="py-3 px-4 sm:px-6 font-semibold text-white">{feat.name}</td>
+                    <td className="py-3 px-4 sm:px-6 text-center text-slate-400">{feat.t1}</td>
+                    <td className="py-3 px-4 sm:px-6 text-center text-sky-300 font-medium">{feat.t2}</td>
+                    <td className="py-3 px-4 sm:px-6 text-center text-lime-accent font-semibold">{feat.t3}</td>
                   </tr>
                 ))}
               </tbody>

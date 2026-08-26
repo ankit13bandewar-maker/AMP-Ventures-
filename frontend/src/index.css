@@ -1913,4 +1913,35 @@ html, body {
   }
 }
 
+/* Mobile-First Snap Carousel Utilities */
+.mobile-snap-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.mobile-snap-card {
+  scroll-snap-align: center;
+  flex: 0 0 88%;
+  max-width: 340px;
+}
+
+@media (min-width: 768px) {
+  .mobile-snap-carousel {
+    display: grid;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-bottom: 0;
+  }
+  .mobile-snap-card {
+    flex: unset;
+    max-width: unset;
+  }
+}
+
+
 
